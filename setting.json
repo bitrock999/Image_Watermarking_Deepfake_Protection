@@ -1,8 +1,9 @@
 {
     "global_settings":{
         "data_path":"./data/img_align_celeba",
+        "data_patch_evaluate":"data/Fasilkom Unsri/TI reguler",
         "attr_path":"./data/list_attr_celeba.txt",
-        "results_path":"./data/disrupting-deepfakes-results/",
+        "results_path":"./data/disrupting-deepfakes-results/new_dataset",
         "img_size":256,
         "num_test":128,
         "gpu":1,

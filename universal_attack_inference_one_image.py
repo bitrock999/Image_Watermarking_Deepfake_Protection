@@ -4,10 +4,11 @@ import json
 import os
 from os.path import join
 import sys
+import shutil
 import matplotlib.image
 from tqdm import tqdm
 from PIL import Image
-
+from attacks import LinfPGDAttack
 
 import torch
 import torch.utils.data as data
@@ -44,18 +45,26 @@ def parse(args=None):
     return args_attack
 
 
-# init attacker
 def init_Attack(args_attack):
-    pgd_attack = attacks.LinfPGDAttack(model=None, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'), epsilon=args_attack.attacks.epsilon, k=args_attack.attacks.k, a=args_attack.attacks.a, star_factor=args_attack.attacks.star_factor, attention_factor=args_attack.attacks.attention_factor, att_factor=args_attack.attacks.att_factor, HiSD_factor=args_attack.attacks.HiSD_factor, args=args_attack.attacks)
+    pgd_attack = LinfPGDAttack(model=None, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'), epsilon=args_attack.attacks.epsilon, k=args_attack.attacks.k, a=args_attack.attacks.a, star_factor=args_attack.attacks.star_factor, attention_factor=args_attack.attacks.attention_factor, att_factor=args_attack.attacks.att_factor, HiSD_factor=args_attack.attacks.HiSD_factor, args=args_attack.attacks)
     return pgd_attack
 
 if __name__ == "__main__":
     args_attack = parse()
     print(args_attack)
-    os.system('cp -r ./results {}/results{}'.format(args_attack.global_settings.results_path, args_attack.attacks.momentum))
+    
+    results_dir = './results'
+    if os.path.exists(results_dir):
+        shutil.rmtree(results_dir)  # Delete the existing 'results' directory
+        
+    os.makedirs(results_dir)  # Create the 'results' directory
+    
+    shutil.copytree(results_dir, '{}/results{}'.format(args_attack.global_settings.results_path, args_attack.attacks.momentum))
     print("experiment dir is created")
-    os.system('cp ./setting.json {}'.format(os.path.join(args_attack.global_settings.results_path, 'results{}/setting.json'.format(args_attack.attacks.momentum))))
+    
+    shutil.copyfile('./setting.json', os.path.join(args_attack.global_settings.results_path, 'results{}/setting.json'.format(args_attack.attacks.momentum)))
     print("experiment config is saved")
+
 
 
     pgd_attack = init_Attack(args_attack)
@@ -75,7 +84,8 @@ if __name__ == "__main__":
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
-    image = Image.open(sys.argv[1])
+    image_path = 'data/Fasilkom Unsri/TI reguler/09021181823011.jpg'
+    image = Image.open(image_path)
     img = image.convert("RGB")
     img = tf(img).unsqueeze(0)
 
@@ -111,18 +121,18 @@ if __name__ == "__main__":
                 n_dist += 1
             n_samples += 1
         
-        ############# 保存图片做指标评测 #############
-        # 保存原图
+        ############# Save image for metrics review #############
+        # Save original image
         out_file = './demo_results/AttGAN_original.jpg'
         vutils.save_image(
             img_a.cpu(), out_file,
             nrow=1, normalize=True, range=(-1., 1.)
         )
         for j in range(len(samples)-2):
-            # 保存对抗样本生成的图片
+            # Save adversarial sample generation images  
             out_file = './demo_results/AttGAN_advgen_{}.jpg'.format(j)
             vutils.save_image(samples[j+2], out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # 保存原图生成的图片
+            # Save the original generated image
             out_file = './demo_results/AttGAN_gen_{}.jpg'.format(j)
             vutils.save_image(noattack_list[j], out_file, nrow=1, normalize=True, range=(-1., 1.))
         
@@ -149,16 +159,16 @@ if __name__ == "__main__":
                 n_dist += 1
             n_samples += 1
         
-        ############# 保存图片做指标评测 #############
-        # 保存原图
+        ############# Save image for metrics review #############
+        # Save original image
         out_file = './demo_results/stargan_original.jpg'
         vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
         for j in range(len(x_fake_list)):
-            # 保存原图生成图片
+            # Save the original image to generate an image
             gen_noattack = x_noattack_list[j]
             out_file = './demo_results/stargan_gen_{}.jpg'.format(j)
             vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # 保存对抗样本生成图片
+            # Save adversarial sample generation images    
             gen = x_fake_list[j]
             out_file = './demo_results/stargan_advgen_{}.jpg'.format(j)
             vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
@@ -184,16 +194,16 @@ if __name__ == "__main__":
                 n_dist += 1
             n_samples += 1
         
-        ############# 保存图片做指标评测 #############
-        # 保存原图
+        ############# Save image for metrics review #############
+        # Save original image
         out_file = './demo_results/attentiongan_original.jpg'
         vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
         for j in range(len(x_fake_list)):
-            # 保存原图生成图片
+            # Save the original image to generate an image
             gen_noattack = x_noattack_list[j]
             out_file = './demo_results/attentiongan_gen_{}.jpg'.format(j)
             vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # 保存对抗样本生成图片
+            # Save adversarial sample generation images
             gen = x_fake_list[j]
             out_file = './demo_results/attentiongan_advgen_{}.jpg'.format(j)
             vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
@@ -231,14 +241,14 @@ if __name__ == "__main__":
                 n_dist += 1
             n_samples += 1
 
-            ############# 保存图片做指标评测 #############
-            # 保存原图
+            ############# Save image for metrics review #############
+            # Save original image
             out_file = './demo_results/HiSD_original.jpg'
             vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
             
             out_file = './demo_results/HiSD_gen.jpg'
             vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # 保存对抗样本生成图片
+            # Save adversarial sample generation images
             gen = x_fake_list[j]
             out_file = './demo_results/HiSD_advgen.jpg'
             vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
