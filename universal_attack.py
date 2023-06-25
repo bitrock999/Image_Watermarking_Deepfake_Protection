@@ -19,6 +19,7 @@ from AttGAN.data import check_attribute_conflict
 
 
 from data import CelebA
+
 import attacks
 
 from model_data_prepare import prepare
@@ -63,9 +64,9 @@ def init_Attack(args_attack):
 
 pgd_attack = init_Attack(args_attack)
 
-# 载入已有扰动
-# if args_attack.global_settings.universal_perturbation_path:
-#     pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
+# Load existing perturbation
+if args_attack.global_settings.universal_perturbation_path:
+     pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
 
 
 # init the attacker models

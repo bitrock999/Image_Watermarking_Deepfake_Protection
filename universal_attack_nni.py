@@ -60,18 +60,22 @@ def search():
     args_attack.attacks.attention_factor = float(tuner_params['aggan_factor'])
     args_attack.attacks.att_factor = float(tuner_params['att_factor'])
     args_attack.attacks.HiSD_factor = float(tuner_params['HiSD_factor'])
+        # Load the settings from the setting.json file
+        
+    with open('setting.json', 'r') as f:
+        settings = json.load(f)
+    results_path = settings['global_settings']['results_path']
 
+    # Print args_attack
     print(args_attack)
-    results_dir = os.path.join(args_attack.global_settings.results_path, 'results{}'.format(args_attack.attacks.momentum))
-    if os.path.exists(results_dir):
-        shutil.rmtree(results_dir)  # delete existing directory
-    
-    os.makedirs(results_dir)  # create new directory
-    print("experiment dir is created")
 
-    shutil.copy('./setting.json', os.path.join(results_dir, 'setting.json'))
-    print("experiment config is saved")
+    # Copy the results directory to the specified path
+    shutil.copytree('./results', os.path.join(results_path, 'results{}'.format(args_attack.attacks.momentum)))
+    print("Experiment directory is created")
 
+    # Save the experiment config
+    shutil.copy('./setting.json', os.path.join(results_path, 'results{}/setting.json'.format(args_attack.attacks.momentum)))
+    print("Experiment config is saved")
 
     # Init the attacker
     pgd_attack = init_Attack(args_attack)

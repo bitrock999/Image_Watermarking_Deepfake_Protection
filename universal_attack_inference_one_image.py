@@ -74,7 +74,7 @@ if __name__ == "__main__":
         pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
 
     # Init the attacked models
-    attack_dataloader, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F_, T, G, E, reference, gen_models = prepare()
+    attack_dataloader, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F, T, G, E, reference, gen_models = prepare()
     print("finished init the attacked models")
 
     tf = transforms.Compose([
@@ -84,7 +84,7 @@ if __name__ == "__main__":
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
-    image_path = 'data/Fasilkom Unsri/TI reguler/09021181823011.jpg'
+    image_path = './data/img_fasilkomUnsri18_ready/09021181823013_1.jpg'
     image = Image.open(image_path)
     img = image.convert("RGB")
     img = tf(img).unsqueeze(0)
@@ -158,6 +158,7 @@ if __name__ == "__main__":
             if F.mse_loss(gen, gen_noattack) > 0.05:
                 n_dist += 1
             n_samples += 1
+            
         
         ############# Save image for metrics review #############
         # Save original image
@@ -210,6 +211,7 @@ if __name__ == "__main__":
         break
     print('attentiongan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
 
+
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
@@ -222,6 +224,7 @@ if __name__ == "__main__":
             s_trg = F_(reference, 1)
             c_trg = T(c_trg, s_trg, 1)
             gen_noattack = G(c_trg)
+
             # adv
             c = E(img_a + pgd_attack.up)
             c_trg = c
@@ -245,9 +248,10 @@ if __name__ == "__main__":
             # Save original image
             out_file = './demo_results/HiSD_original.jpg'
             vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
-            
+
             out_file = './demo_results/HiSD_gen.jpg'
             vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
+            
             # Save adversarial sample generation images
             gen = x_fake_list[j]
             out_file = './demo_results/HiSD_advgen.jpg'

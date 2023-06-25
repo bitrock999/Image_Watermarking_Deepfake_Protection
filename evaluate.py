@@ -31,12 +31,11 @@ def evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, 
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        # if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
-        #     break
-
+        if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
+             break
         # img_a = gauss
-        if idx == 20:
-            break
+        #if idx == 20:
+        #    break
         img_a = img_a.cuda() if args_attack.global_settings.gpu else img_a
         
         with torch.no_grad():
@@ -61,22 +60,23 @@ def evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, 
             l2_error += torch.nn.functional.mse_loss(gen, gen_noattack)
             l0_error += (gen - gen_noattack).norm(0)
             min_dist += (gen - gen_noattack).norm(float('-inf'))
+            
             if (((gen*mask - gen_noattack*mask)**2).sum() / (mask.sum()*3)) > 0.05:
                 n_dist += 1
             n_samples += 1
 
-    print('HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
-    HiDF_results = 'HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples)
+    print('HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, n_dist / n_samples, l0_error / n_samples, min_dist / n_samples))
+    HiDF_results = 'HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, n_dist/ n_samples, l0_error / n_samples, min_dist / n_samples)
     HiDF_prop_dist = float(n_dist) / n_samples
 
     # AttGAN inference and evaluating
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        # if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
-        #     break
-        if idx == 20:
-            break
+        if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
+             break
+        #if idx == 20:
+          #  break
         img_a = img_a.cuda() if args_attack.global_settings.gpu else img_a
         att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
         att_a = att_a.type(torch.float)   
@@ -123,10 +123,10 @@ def evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, 
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        # if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
-        #     break
-        if idx == 20:
-            break
+        if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
+             break
+        #if idx == 20:
+        #    break
         img_a = img_a.cuda() if args_attack.global_settings.gpu else img_a
         att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
         att_a = att_a.type(torch.float)
@@ -156,10 +156,10 @@ def evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, 
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        # if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
-        #     break
-        if idx == 20:
-            break
+        if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
+             break
+        #if idx == 20:
+        #    break
         img_a = img_a.cuda() if args_attack.global_settings.gpu else img_a
         att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
         att_a = att_a.type(torch.float)

@@ -1,8 +1,8 @@
-authorName: HaoHuang
+authorName: Renaldi
 experimentName: trace
-trialConcurrency: 8
+trialConcurrency: 1
 maxExecDuration: 1000h
-maxTrialNum: 1000
+maxTrialNum: 1
 #choice: local, remote, pai
 trainingServicePlatform: local
 searchSpacePath: search_space.json
@@ -13,19 +13,20 @@ tuner:
   #choice: TPE, Random, Anneal, Evolution, BatchTuner, MetisTuner
   #SMAC (SMAC should be installed through nnictl)
   builtinTunerName: TPE
-  gpuIndices: 0,1,2,3,4,5,6,7
+  gpuIndices: 0
   
   classArgs:
     #choice: maximize, minimize
     optimize_mode: maximize
+    
 trial:
-  command: python3 universal_attack_nni.py
+  command: python universal_attack_nni.py
   codeDir: .
-  gpuNum: 1
+  gpuNum: 0
   
 localConfig:
   maxTrialNumPerGpu: 1
   useActiveGpu: true
-  gpuIndices: 0,1,2,3,4,5,6,7
+  gpuIndices: 0
   
   

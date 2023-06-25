@@ -1,14 +1,15 @@
 {
     "global_settings":{
-        "data_path":"./data/img_align_celeba",
-        "data_patch_evaluate":"data/Fasilkom Unsri/TI reguler",
-        "attr_path":"./data/list_attr_celeba.txt",
-        "results_path":"./data/disrupting-deepfakes-results/new_dataset",
+        "data_path":"./data/img_align_celeba1000",
+        "data_path_KPM":"./data/img_fasilkomUnsri18_ready",
+        "attr_path":"./data/list_attr_celeba1000.txt",
+        "results_path":"./results",
+        "results_path_FasilkomUnsri":"./data/img_fasilkomUnsri18_ready",
         "img_size":256,
         "num_test":128,
         "gpu":1,
         "universal_perturbation_path":"./perturbation.pt",
-        "batch_size":64
+        "batch_size":10
     },
     "attacks":{
         "momentum":0.5,

@@ -1,0 +1,1162 @@
+PS C:\Users\user\Documents\bahan TA\SKRIPSI\Image_Watermarking_Deepfake_Protection> & C:/anaconda3/envs/fake/python.exe "c:/Users/user/Documents/bahan TA/SKRIPSI/Image_Watermarking_Deepfake_Protection/universal_attack.py"
+
+Namespace(
+global_settings=Namespace(
+data_path='./data/img_align_celeba1000', 
+data_path_KPM='./data/Fasilkom Unsri/Sk Reguler', 
+attr_path='./data/list_attr_celeba1000.txt', 
+results_path='./results', 
+results_path_FasilkomUnsri='./data/img_fasilkomUnsri18', 
+img_size=256, num_test=128, gpu=1, 
+universal_perturbation_path='./perturbation.pt', 
+batch_size=1), 
+
+attacks=Namespace(
+momentum=0.5, 
+epsilon=0.05, 
+k=10, 
+universal=1,
+a=0.01, 
+star_factor=1, 
+attention_factor=1, 
+att_factor=1, 
+HiSD_factor=1), 
+
+AttGAN=Namespace(
+attgan_experiment_name='256_shortcut1_inject0_none', 
+attgan_test_int=1.0, 
+attgan_load_epoch='latest', 
+attgan_multi_gpu=0), 
+
+stargan=Namespace(
+c_dim=5, 
+c2_dim=8, 
+celeba_crop_size=178, 
+rafd_crop_size=256, 
+image_size=256, 
+g_conv_dim=64, 
+d_conv_dim=64, 
+g_repeat_num=6, 
+d_repeat_num=6, 
+lambda_cls=1, 
+lambda_rec=10, 
+lambda_gp=10, 
+resume_iters='', 
+dataset='CelebA', 
+batch_size=1, 
+num_iters=200000, 
+num_iters_decay=100000, 
+g_lr=0.0001, 
+d_lr=0.0001, 
+n_critic=5, 
+beta1=0.5, 
+beta2=0.999, 
+selected_attrs=['Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Male', 'Young'], 
+test_iters=200000, 
+num_workers=1, 
+mode='test', 
+use_tensorboard=0, 
+model_save_dir='./stargan/stargan_celeba_256/models', 
+result_dir='./stargan/stargan_celeba_256/results_test', 
+log_step=10, 
+sample_step=1000, 
+model_save_step=5000, 
+lr_update_step=1000, 
+data_path='./data/img_align_celeba', a
+ttr_path='./data/list_attr_celeba.txt', 
+img_size=256, 
+num_test=10, 
+gpu=1, 
+universal=1, 
+log_dir='./stargan/stargan/logs', 
+sample_dir='./stargan/stargan/samples'), 
+
+AttentionGAN=Namespace(
+c_dim=5, 
+c2_dim=8, 
+celeba_crop_size=178, 
+rafd_crop_size=256, 
+image_size=256, 
+g_conv_dim=64, 
+d_conv_dim=64, 
+g_repeat_num=6, 
+d_repeat_num=6, 
+lambda_cls=1, 
+lambda_rec=10, 
+lambda_gp=10, 
+resume_iters='', 
+dataset='CelebA', 
+batch_size=1, 
+num_iters=200000, 
+num_iters_decay=100000, 
+g_lr=0.0001, d_lr=0.0001, 
+n_critic=5, 
+beta1=0.5, 
+beta2=0.999, 
+selected_attrs=['Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Male', 'Young'], 
+test_iters=200000, 
+num_workers=1, 
+mode='test', 
+use_tensorboard=0, 
+model_save_dir='./AttentionGAN/AttentionGAN_v1_multi/checkpoints/celeba_256_pretrained', 
+result_dir='./AttentionGAN/AttentionGAN_v1_multi//stargan_celeba_256/results_test', 
+log_step=10, 
+sample_step=1000, 
+model_save_step=5000, 
+lr_update_step=1000, 
+data_path='./data/img_align_celeba', 
+attr_path='./data/list_attr_celeba.txt', 
+img_size=256, 
+num_test=10, 
+gpu=1, 
+universal=1, 
+log_dir='./attentiongan/attentiongan/logs', sample_dir='./attentiongan/attentiongan/samples'))
+
+experiment dir is created
+experiment config is saved
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1          [4, 64, 128, 128]           3,072
+       BatchNorm2d-2          [4, 64, 128, 128]             128
+         LeakyReLU-3          [4, 64, 128, 128]               0
+       Conv2dBlock-4          [4, 64, 128, 128]               0
+            Conv2d-5           [4, 128, 64, 64]         131,072
+       BatchNorm2d-6           [4, 128, 64, 64]             256
+         LeakyReLU-7           [4, 128, 64, 64]               0
+       Conv2dBlock-8           [4, 128, 64, 64]               0
+            Conv2d-9           [4, 256, 32, 32]         524,288
+      BatchNorm2d-10           [4, 256, 32, 32]             512
+        LeakyReLU-11           [4, 256, 32, 32]               0
+      Conv2dBlock-12           [4, 256, 32, 32]               0
+           Conv2d-13           [4, 512, 16, 16]       2,097,152
+      BatchNorm2d-14           [4, 512, 16, 16]           1,024
+        LeakyReLU-15           [4, 512, 16, 16]               0
+      Conv2dBlock-16           [4, 512, 16, 16]               0
+           Conv2d-17            [4, 1024, 8, 8]       8,388,608
+      BatchNorm2d-18            [4, 1024, 8, 8]           2,048
+        LeakyReLU-19            [4, 1024, 8, 8]               0
+      Conv2dBlock-20            [4, 1024, 8, 8]               0
+  ConvTranspose2d-21          [4, 1024, 16, 16]      16,990,208
+      BatchNorm2d-22          [4, 1024, 16, 16]           2,048
+             ReLU-23          [4, 1024, 16, 16]               0
+ConvTranspose2dBlock-24          [4, 1024, 16, 16]               0
+  ConvTranspose2d-25           [4, 512, 32, 32]      12,582,912
+      BatchNorm2d-26           [4, 512, 32, 32]           1,024
+             ReLU-27           [4, 512, 32, 32]               0
+ConvTranspose2dBlock-28           [4, 512, 32, 32]               0
+  ConvTranspose2d-29           [4, 256, 64, 64]       2,097,152
+      BatchNorm2d-30           [4, 256, 64, 64]             512
+             ReLU-31           [4, 256, 64, 64]               0
+ConvTranspose2dBlock-32           [4, 256, 64, 64]               0
+  ConvTranspose2d-33         [4, 128, 128, 128]         524,288
+      BatchNorm2d-34         [4, 128, 128, 128]             256
+             ReLU-35         [4, 128, 128, 128]               0
+ConvTranspose2dBlock-36         [4, 128, 128, 128]               0
+  ConvTranspose2d-37           [4, 3, 256, 256]           6,147
+             Tanh-38           [4, 3, 256, 256]               0
+ConvTranspose2dBlock-39           [4, 3, 256, 256]               0
+================================================================
+Total params: 43,352,707
+Trainable params: 43,352,707
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 39.00
+Forward/backward pass size (MB): 746.00
+Params size (MB): 165.38
+Estimated Total Size (MB): 950.38
+----------------------------------------------------------------
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1          [4, 64, 128, 128]           3,072
+    InstanceNorm2d-2          [4, 64, 128, 128]             128
+         LeakyReLU-3          [4, 64, 128, 128]               0
+       Conv2dBlock-4          [4, 64, 128, 128]               0
+            Conv2d-5           [4, 128, 64, 64]         131,072
+    InstanceNorm2d-6           [4, 128, 64, 64]             256
+         LeakyReLU-7           [4, 128, 64, 64]               0
+       Conv2dBlock-8           [4, 128, 64, 64]               0
+            Conv2d-9           [4, 256, 32, 32]         524,288
+   InstanceNorm2d-10           [4, 256, 32, 32]             512
+        LeakyReLU-11           [4, 256, 32, 32]               0
+      Conv2dBlock-12           [4, 256, 32, 32]               0
+           Conv2d-13           [4, 512, 16, 16]       2,097,152
+   InstanceNorm2d-14           [4, 512, 16, 16]           1,024
+        LeakyReLU-15           [4, 512, 16, 16]               0
+      Conv2dBlock-16           [4, 512, 16, 16]               0
+           Conv2d-17            [4, 1024, 8, 8]       8,388,608
+   InstanceNorm2d-18            [4, 1024, 8, 8]           2,048
+        LeakyReLU-19            [4, 1024, 8, 8]               0
+      Conv2dBlock-20            [4, 1024, 8, 8]               0
+           Linear-21                  [4, 1024]      67,109,888
+             ReLU-22                  [4, 1024]               0
+      LinearBlock-23                  [4, 1024]               0
+           Linear-24                     [4, 1]           1,025
+      LinearBlock-25                     [4, 1]               0
+           Linear-26                  [4, 1024]      67,109,888
+             ReLU-27                  [4, 1024]               0
+      LinearBlock-28                  [4, 1024]               0
+           Linear-29                    [4, 13]          13,325
+      LinearBlock-30                    [4, 13]               0
+================================================================
+Total params: 145,382,286
+Trainable params: 145,382,286
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 3.00
+Forward/backward pass size (MB): 248.19
+Params size (MB): 554.59
+Estimated Total Size (MB): 805.78
+----------------------------------------------------------------
+
+Find model of latest epoch: .\AttGAN\output\256_shortcut1_inject0_none\checkpoint\weights.199.pth
+Finished preprocessing the CelebA dataset...
+Testing images: 128
+Finished preprocessing the CelebA dataset...
+Testing images: 128
+Generator(
+  (main): Sequential(
+    (0): Conv2d(8, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (4): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+    (6): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): ReLU(inplace=True)
+    (9): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (10): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (11): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (12): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (13): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (14): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (15): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (16): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): ReLU(inplace=True)
+    (18): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (19): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (20): ReLU(inplace=True)
+    (21): Conv2d(64, 3, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (22): Tanh()
+  )
+)
+
+G
+The number of parameters: 8430528
+Discriminator(
+  (main): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (3): LeakyReLU(negative_slope=0.01)
+    (4): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (7): LeakyReLU(negative_slope=0.01)
+    (8): Conv2d(512, 1024, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): Conv2d(1024, 2048, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (11): LeakyReLU(negative_slope=0.01)
+  )
+  (conv1): Conv2d(2048, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (conv2): Conv2d(2048, 5, kernel_size=(4, 4), stride=(1, 1), bias=False)
+)
+
+D
+The number of parameters: 44884928
+Loading the trained models from step 200000...
+Generator(
+  (main): Sequential(
+    (0): Conv2d(8, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (4): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+    (6): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): ReLU(inplace=True)
+    (9): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (10): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (11): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (12): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (13): ResidualBlock(
+      (main): Sequential(
+    (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (3): LeakyReLU(negative_slope=0.01)
+    (4): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (7): LeakyReLU(negative_slope=0.01)
+    (8): Conv2d(512, 1024, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): Conv2d(1024, 2048, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (11): LeakyReLU(negative_slope=0.01)
+  )
+  (conv1): Conv2d(2048, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (conv2): Conv2d(2048, 5, kernel_size=(4, 4), stride=(1, 1), bias=False)
+)
+
+D
+The number of parameters: 44884928
+Loading the trained models from step 200000...
+Finished deepfake models initialization!
+
+finished init the attacked models, only attack 2 epochs
+  0%|                                                                                                                     | 0/200 [00:00<?, ?it/s]C:\anaconda3\envs\fake\lib\site-packages\torch\nn\functional.py:1967: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.  
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+save the CMUA-Watermark
+  0%|▌                                                                                                          | 1/200 [00:36<2:02:05, 36.81s/it]save the CMUA-Watermark
+  1%|█                                                                                                          | 2/200 [01:13<2:01:52, 36.93s/it]save the CMUA-Watermark
+  2%|█▌                                                                                                         | 3/200 [01:50<2:01:35, 37.03s/it]save the CMUA-Watermark
+  2%|██▏                                                                                                        | 4/200 [02:28<2:01:10, 37.10s/it]save the CMUA-Watermark
+  2%|██▋                                                                                                        | 5/200 [03:05<2:01:08, 37.27s/it]save the CMUA-Watermark
+  3%|███▏                                                                                                       | 6/200 [03:43<2:01:05, 37.45s/it]save the CMUA-Watermark
+  4%|███▋                                                                                                       | 7/200 [04:21<2:01:02, 37.63s/it]save the CMUA-Watermark
+  4%|████▎                                                                                                      | 8/200 [04:59<2:00:53, 37.78s/it]save the CMUA-Watermark
+  4%|████▊                                                                                                      | 9/200 [05:37<2:00:42, 37.92s/it]save the CMUA-Watermark
+  5%|█████▎                                                                                                    | 10/200 [06:16<2:00:33, 38.07s/it]save the CMUA-Watermark
+  6%|█████▊                                                                                                    | 11/200 [06:54<2:00:16, 38.18s/it]save the CMUA-Watermark
+  6%|██████▎                                                                                                   | 12/200 [07:33<1:59:58, 38.29s/it]save the CMUA-Watermark
+  6%|██████▉                                                                                                   | 13/200 [08:11<1:59:34, 38.36s/it]save the CMUA-Watermark
+  7%|███████▍                                                                                                  | 14/200 [08:50<1:59:11, 38.45s/it]save the CMUA-Watermark
+  8%|███████▉                                                                                                  | 15/200 [09:29<1:58:44, 38.51s/it]save the CMUA-Watermark
+  8%|████████▍                                                                                                 | 16/200 [10:07<1:58:15, 38.56s/it]save the CMUA-Watermark
+  8%|█████████                                                                                                 | 17/200 [10:46<1:57:48, 38.63s/it]save the CMUA-Watermark
+  9%|█████████▌                                                                                                | 18/200 [11:25<1:57:18, 38.67s/it]save the CMUA-Watermark
+ 10%|██████████                                                                                                | 19/200 [12:04<1:56:48, 38.72s/it]save the CMUA-Watermark
+ 10%|██████████▌                                                                                               | 20/200 [12:42<1:56:12, 38.74s/it]save the CMUA-Watermark
+ 10%|███████████▏                                                                                              | 21/200 [13:43<2:15:08, 45.30s/it]save the CMUA-Watermark
+ 11%|███████████▋                                                                                              | 22/200 [14:33<2:18:06, 46.55s/it]save the CMUA-Watermark
+ 12%|████████████▏                                                                                             | 23/200 [15:22<2:19:47, 47.39s/it]save the CMUA-Watermark
+ 12%|████████████▋                                                                                             | 24/200 [16:11<2:20:36, 47.93s/it]save the CMUA-Watermark
+ 12%|█████████████▎                                                                                            | 25/200 [17:00<2:20:52, 48.30s/it]save the CMUA-Watermark
+ 13%|█████████████▊                                                                                            | 26/200 [17:49<2:20:48, 48.55s/it]save the CMUA-Watermark
+ 14%|██████████████▎                                                                                           | 27/200 [18:39<2:20:31, 48.73s/it]save the CMUA-Watermark
+ 14%|██████████████▊                                                                                           | 28/200 [19:28<2:20:00, 48.84s/it]save the CMUA-Watermark
+ 14%|███████████████▎                                                                                          | 29/200 [20:17<2:19:25, 48.92s/it]save the CMUA-Watermark
+ 15%|███████████████▉                                                                                          | 30/200 [21:06<2:18:47, 48.99s/it]save the CMUA-Watermark
+ 16%|████████████████▍                                                                                         | 31/200 [21:55<2:18:04, 49.02s/it]save the CMUA-Watermark
+ 16%|████████████████▉                                                                                         | 32/200 [22:44<2:17:18, 49.04s/it]save the CMUA-Watermark
+ 16%|█████████████████▍                                                                                        | 33/200 [23:33<2:16:31, 49.05s/it]save the CMUA-Watermark
+ 17%|██████████████████                                                                                        | 34/200 [24:22<2:15:42, 49.05s/it]save the CMUA-Watermark
+ 18%|██████████████████▌                                                                                       | 35/200 [25:11<2:14:54, 49.06s/it]save the CMUA-Watermark
+ 18%|███████████████████                                                                                       | 36/200 [26:00<2:14:09, 49.08s/it]save the CMUA-Watermark
+ 18%|███████████████████▌                                                                                      | 37/200 [26:49<2:13:20, 49.08s/it]save the CMUA-Watermark
+ 19%|████████████████████▏                                                                                     | 38/200 [27:39<2:12:30, 49.08s/it]save the CMUA-Watermark
+ 20%|████████████████████▋                                                                                     | 39/200 [28:28<2:11:39, 49.07s/it]save the CMUA-Watermark
+ 20%|█████████████████████▏                                                                                    | 40/200 [29:17<2:10:50, 49.07s/it]save the CMUA-Watermark
+ 20%|█████████████████████▋                                                                                    | 41/200 [30:06<2:10:00, 49.06s/it]save the CMUA-Watermark
+ 21%|██████████████████████▎                                                                                   | 42/200 [30:55<2:09:12, 49.07s/it]save the CMUA-Watermark
+ 22%|██████████████████████▊                                                                                   | 43/200 [31:44<2:08:23, 49.06s/it]save the CMUA-Watermark
+ 22%|███████████████████████▎                                                                                  | 44/200 [32:33<2:07:33, 49.06s/it]save the CMUA-Watermark
+ 22%|███████████████████████▊                                                                                  | 45/200 [33:22<2:06:53, 49.12s/it]save the CMUA-Watermark
+ 23%|████████████████████████▍                                                                                 | 46/200 [34:11<2:06:02, 49.11s/it]save the CMUA-Watermark
+ 24%|████████████████████████▉                                                                                 | 47/200 [35:00<2:05:11, 49.09s/it]save the CMUA-Watermark
+ 24%|█████████████████████████▍                                                                                | 48/200 [35:49<2:04:24, 49.11s/it]save the CMUA-Watermark
+ 24%|█████████████████████████▉                                                                                | 49/200 [36:38<2:03:33, 49.10s/it]save the CMUA-Watermark
+ 25%|██████████████████████████▌                                                                               | 50/200 [37:28<2:02:50, 49.14s/it]save the CMUA-Watermark
+ 26%|███████████████████████████                                                                               | 51/200 [38:17<2:01:58, 49.12s/it]save the CMUA-Watermark
+ 26%|███████████████████████████▌                                                                              | 52/200 [39:06<2:01:06, 49.10s/it]save the CMUA-Watermark
+ 26%|████████████████████████████                                                                              | 53/200 [39:55<2:00:14, 49.08s/it]save the CMUA-Watermark
+ 27%|████████████████████████████▌                                                                             | 54/200 [40:44<1:59:24, 49.07s/it]save the CMUA-Watermark
+ 28%|█████████████████████████████▏                                                                            | 55/200 [41:33<1:58:35, 49.07s/it]save the CMUA-Watermark
+ 28%|█████████████████████████████▋                                                                            | 56/200 [42:22<1:57:45, 49.07s/it]save the CMUA-Watermark
+ 28%|██████████████████████████████▏                                                                           | 57/200 [43:11<1:56:57, 49.07s/it]save the CMUA-Watermark
+ 29%|██████████████████████████████▋                                                                           | 58/200 [44:00<1:56:07, 49.07s/it]save the CMUA-Watermark
+ 30%|███████████████████████████████▎                                                                          | 59/200 [44:49<1:55:25, 49.12s/it]save the CMUA-Watermark
+ 30%|███████████████████████████████▊                                                                          | 60/200 [45:38<1:54:33, 49.10s/it]save the CMUA-Watermark
+ 30%|████████████████████████████████▎                                                                         | 61/200 [46:28<1:53:42, 49.08s/it]save the CMUA-Watermark
+ 31%|████████████████████████████████▊                                                                         | 62/200 [47:17<1:52:51, 49.07s/it]save the CMUA-Watermark
+ 32%|█████████████████████████████████▍                                                                        | 63/200 [48:06<1:52:00, 49.06s/it]save the CMUA-Watermark
+ 32%|█████████████████████████████████▉                                                                        | 64/200 [48:55<1:51:13, 49.07s/it]save the CMUA-Watermark
+ 32%|██████████████████████████████████▍                                                                       | 65/200 [49:44<1:50:21, 49.05s/it]save the CMUA-Watermark
+ 33%|██████████████████████████████████▉                                                                       | 66/200 [50:33<1:49:31, 49.04s/it]save the CMUA-Watermark
+ 34%|███████████████████████████████████▌                                                                      | 67/200 [51:22<1:48:42, 49.04s/it]save the CMUA-Watermark
+ 34%|████████████████████████████████████                                                                      | 68/200 [52:11<1:47:52, 49.04s/it]save the CMUA-Watermark
+ 34%|████████████████████████████████████▌                                                                     | 69/200 [53:00<1:47:03, 49.03s/it]save the CMUA-Watermark
+ 35%|█████████████████████████████████████                                                                     | 70/200 [53:49<1:46:13, 49.02s/it]save the CMUA-Watermark
+ 36%|█████████████████████████████████████▋                                                                    | 71/200 [54:38<1:45:24, 49.03s/it]save the CMUA-Watermark
+ 36%|██████████████████████████████████████▏                                                                   | 72/200 [55:27<1:44:36, 49.03s/it]save the CMUA-Watermark
+ 36%|██████████████████████████████████████▋                                                                   | 73/200 [56:16<1:43:47, 49.04s/it]save the CMUA-Watermark
+ 37%|███████████████████████████████████████▏                                                                  | 74/200 [57:05<1:42:59, 49.04s/it]save the CMUA-Watermark
+ 38%|███████████████████████████████████████▊                                                                  | 75/200 [57:54<1:42:11, 49.05s/it]save the CMUA-Watermark
+ 38%|████████████████████████████████████████▎                                                                 | 76/200 [58:43<1:41:23, 49.06s/it]save the CMUA-Watermark
+ 38%|████████████████████████████████████████▊                                                                 | 77/200 [59:32<1:40:33, 49.05s/it]save the CMUA-Watermark
+ 39%|████████████████████████████████████████▌                                                               | 78/200 [1:00:21<1:39:44, 49.05s/it]save the CMUA-Watermark
+ 40%|█████████████████████████████████████████                                                               | 79/200 [1:01:10<1:38:54, 49.05s/it]save the CMUA-Watermark
+ 40%|█████████████████████████████████████████▌                                                              | 80/200 [1:01:59<1:38:06, 49.05s/it]save the CMUA-Watermark
+ 40%|██████████████████████████████████████████                                                              | 81/200 [1:02:48<1:37:18, 49.06s/it]save the CMUA-Watermark
+ 41%|██████████████████████████████████████████▋                                                             | 82/200 [1:03:37<1:36:28, 49.05s/it]save the CMUA-Watermark
+ 42%|███████████████████████████████████████████▏                                                            | 83/200 [1:04:26<1:35:37, 49.04s/it]save the CMUA-Watermark
+ 42%|███████████████████████████████████████████▋                                                            | 84/200 [1:05:16<1:34:49, 49.05s/it]save the CMUA-Watermark
+ 42%|████████████████████████████████████████████▏                                                           | 85/200 [1:06:05<1:34:05, 49.09s/it]save the CMUA-Watermark
+ 43%|████████████████████████████████████████████▋                                                           | 86/200 [1:06:54<1:33:15, 49.09s/it]save the CMUA-Watermark
+ 44%|█████████████████████████████████████████████▏                                                          | 87/200 [1:07:43<1:32:25, 49.08s/it]save the CMUA-Watermark
+ 44%|█████████████████████████████████████████████▊                                                          | 88/200 [1:08:32<1:31:35, 49.07s/it]save the CMUA-Watermark
+ 44%|██████████████████████████████████████████████▎                                                         | 89/200 [1:09:21<1:30:44, 49.05s/it]save the CMUA-Watermark
+ 45%|██████████████████████████████████████████████▊                                                         | 90/200 [1:10:10<1:29:55, 49.05s/it]save the CMUA-Watermark
+ 46%|███████████████████████████████████████████████▎                                                        | 91/200 [1:10:59<1:29:05, 49.04s/it]save the CMUA-Watermark
+ 46%|███████████████████████████████████████████████▊                                                        | 92/200 [1:11:48<1:28:15, 49.03s/it]save the CMUA-Watermark
+ 46%|████████████████████████████████████████████████▎                                                       | 93/200 [1:12:37<1:27:25, 49.02s/it]save the CMUA-Watermark
+ 47%|████████████████████████████████████████████████▉                                                       | 94/200 [1:13:26<1:26:35, 49.02s/it]save the CMUA-Watermark
+ 48%|█████████████████████████████████████████████████▍                                                      | 95/200 [1:14:15<1:25:48, 49.03s/it]save the CMUA-Watermark
+ 48%|█████████████████████████████████████████████████▉                                                      | 96/200 [1:15:04<1:24:58, 49.03s/it]save the CMUA-Watermark
+ 48%|██████████████████████████████████████████████████▍                                                     | 97/200 [1:15:53<1:24:10, 49.04s/it]save the CMUA-Watermark
+ 49%|██████████████████████████████████████████████████▉                                                     | 98/200 [1:16:42<1:23:21, 49.04s/it]save the CMUA-Watermark
+ 50%|███████████████████████████████████████████████████▍                                                    | 99/200 [1:17:31<1:22:32, 49.04s/it]save the CMUA-Watermark
+ 50%|███████████████████████████████████████████████████▌                                                   | 100/200 [1:18:20<1:21:44, 49.05s/it]save the CMUA-Watermark
+ 50%|████████████████████████████████████████████████████                                                   | 101/200 [1:19:09<1:20:55, 49.04s/it]save the CMUA-Watermark
+ 51%|████████████████████████████████████████████████████▌                                                  | 102/200 [1:19:58<1:20:06, 49.04s/it]save the CMUA-Watermark
+ 52%|█████████████████████████████████████████████████████                                                  | 103/200 [1:20:47<1:19:18, 49.06s/it]save the CMUA-Watermark
+ 52%|█████████████████████████████████████████████████████▌                                                 | 104/200 [1:21:37<1:18:29, 49.06s/it]save the CMUA-Watermark
+ 52%|██████████████████████████████████████████████████████                                                 | 105/200 [1:22:26<1:17:40, 49.06s/it]save the CMUA-Watermark
+ 53%|██████████████████████████████████████████████████████▌                                                | 106/200 [1:23:15<1:16:52, 49.07s/it]save the CMUA-Watermark
+ 54%|███████████████████████████████████████████████████████                                                | 107/200 [1:24:04<1:16:03, 49.07s/it]save the CMUA-Watermark
+ 54%|███████████████████████████████████████████████████████▌                                               | 108/200 [1:24:53<1:15:15, 49.08s/it]save the CMUA-Watermark
+ 55%|████████████████████████████████████████████████████████▏                                              | 109/200 [1:25:42<1:14:27, 49.09s/it]save the CMUA-Watermark
+ 55%|████████████████████████████████████████████████████████▋                                              | 110/200 [1:26:31<1:13:36, 49.07s/it]save the CMUA-Watermark
+ 56%|█████████████████████████████████████████████████████████▏                                             | 111/200 [1:27:20<1:12:47, 49.07s/it]save the CMUA-Watermark
+ 56%|█████████████████████████████████████████████████████████▋                                             | 112/200 [1:28:09<1:11:57, 49.06s/it]save the CMUA-Watermark
+ 56%|██████████████████████████████████████████████████████████▏                                            | 113/200 [1:28:58<1:11:07, 49.05s/it]save the CMUA-Watermark
+ 57%|██████████████████████████████████████████████████████████▋                                            | 114/200 [1:29:47<1:10:17, 49.04s/it]save the CMUA-Watermark
+ 57%|███████████████████████████████████████████████████████████▏                                           | 115/200 [1:30:36<1:09:29, 49.05s/it]save the CMUA-Watermark
+ 58%|███████████████████████████████████████████████████████████▋                                           | 116/200 [1:31:25<1:08:40, 49.05s/it]save the CMUA-Watermark
+ 58%|████████████████████████████████████████████████████████████▎                                          | 117/200 [1:32:14<1:07:50, 49.04s/it]save the CMUA-Watermark
+ 59%|████████████████████████████████████████████████████████████▊                                          | 118/200 [1:33:03<1:07:00, 49.03s/it]save the CMUA-Watermark
+ 60%|█████████████████████████████████████████████████████████████▎                                         | 119/200 [1:33:52<1:06:11, 49.03s/it]save the CMUA-Watermark
+ 60%|█████████████████████████████████████████████████████████████▊                                         | 120/200 [1:34:41<1:05:22, 49.03s/it]save the CMUA-Watermark
+ 60%|██████████████████████████████████████████████████████████████▎                                        | 121/200 [1:35:30<1:04:33, 49.03s/it]save the CMUA-Watermark
+ 61%|██████████████████████████████████████████████████████████████▊                                        | 122/200 [1:36:19<1:03:44, 49.03s/it]save the CMUA-Watermark
+ 62%|███████████████████████████████████████████████████████████████▎                                       | 123/200 [1:37:08<1:02:55, 49.03s/it]save the CMUA-Watermark
+ 62%|███████████████████████████████████████████████████████████████▊                                       | 124/200 [1:37:57<1:02:06, 49.04s/it]save the CMUA-Watermark
+ 62%|████████████████████████████████████████████████████████████████▍                                      | 125/200 [1:38:47<1:01:17, 49.03s/it]save the CMUA-Watermark
+ 63%|████████████████████████████████████████████████████████████████▉                                      | 126/200 [1:39:36<1:00:28, 49.03s/it]save the CMUA-Watermark
+ 64%|██████████████████████████████████████████████████████████████████▋                                      | 127/200 [1:40:25<59:39, 49.03s/it]save the CMUA-Watermark
+ 64%|███████████████████████████████████████████████████████████████████▏                                     | 128/200 [1:41:14<56:56, 47.45s/it] 
+
+The size of CMUA-Watermark:  torch.Size([3, 256, 256])
+
+HiDF 20 images. 
+L1 error: 0.0426822267472744. 
+L2 error: 0.004015895072370768. 
+prop_dist: 0.0. 
+L0 error: 196607.90625. 
+L_-inf error: 2.443790378947597e-07.
+
+AttGAN 280 images. 
+L1 error: 0.09090304374694824. 
+L2 error: 0.028043506667017937. 
+prop_dist: 0.48928571428571427. 
+L0 error: 196607.984375. 
+L_-inf error: 6.119055342423962e-07.
+
+stargan 100 images. 
+L1 error: 0.18931430578231812. 
+L2 error: 0.06268014013767242. 
+prop_dist: 0.79. 
+L0 error: 196608.0. 
+L_-inf error: 1.9190208604413783e-06.
+
+attentiongan 100 images. 
+L1 error: 0.12481725215911865. 
+L2 error: 0.05257279798388481. 
+prop_dist: 1.0. 
+L0 error: 196606.578125. 
+L_-inf error: 1.907348590179936e-08.
+
+
+
+
+Find model of latest epoch: .\AttGAN\output\256_shortcut1_inject0_none\checkpoint\weights.199.pth
+Finished preprocessing the CelebA dataset...
+Testing images: 200
+Finished preprocessing the CelebA dataset...
+Testing images: 200
+Generator(
+  (main): Sequential(
+    (0): Conv2d(8, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (4): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+    (6): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): ReLU(inplace=True)
+    (9): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (10): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (11): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (12): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (13): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (14): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (15): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (16): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): ReLU(inplace=True)
+    (18): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (19): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (20): ReLU(inplace=True)
+    (21): Conv2d(64, 3, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (22): Tanh()
+  )
+)
+G
+The number of parameters: 8430528
+Discriminator(
+  (main): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (3): LeakyReLU(negative_slope=0.01)
+    (4): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (7): LeakyReLU(negative_slope=0.01)
+    (8): Conv2d(512, 1024, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): Conv2d(1024, 2048, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (11): LeakyReLU(negative_slope=0.01)
+  )
+  (conv1): Conv2d(2048, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (conv2): Conv2d(2048, 5, kernel_size=(4, 4), stride=(1, 1), bias=False)
+)
+D
+The number of parameters: 44884928
+Loading the trained models from step 200000...
+Generator(
+  (main): Sequential(
+    (0): Conv2d(8, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (4): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+    (6): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): ReLU(inplace=True)
+    (9): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (10): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (11): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (12): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (13): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (14): ResidualBlock(
+      (main): Sequential(
+        (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (15): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (16): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): ReLU(inplace=True)
+    (18): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    (19): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (20): ReLU(inplace=True)
+    (21): Conv2d(64, 4, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), bias=False)
+  )
+)
+G
+The number of parameters: 8433664
+Discriminator(
+  (main): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): LeakyReLU(negative_slope=0.01)
+    (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (3): LeakyReLU(negative_slope=0.01)
+    (4): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (7): LeakyReLU(negative_slope=0.01)
+    (8): Conv2d(512, 1024, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (9): LeakyReLU(negative_slope=0.01)
+    (10): Conv2d(1024, 2048, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (11): LeakyReLU(negative_slope=0.01)
+  )
+  (conv1): Conv2d(2048, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (conv2): Conv2d(2048, 5, kernel_size=(4, 4), stride=(1, 1), bias=False)
+)
+D
+The number of parameters: 44884928
+Loading the trained models from step 200000...
+Finished deepfake models initialization!
+finished init the attacked models, only attack 2 epochs
+  0%|                                                                                                                     | 0/200 [00:00<?, ?it/s]Cave the CMUA-Watermark
+ 57%|████████████████████████████████████████████████████████████▎                                            | 115/200 [1:12:55<54:10, 38.25s/it]save the CMUA-Watermark
+ 75%|██████████████████████████████████████████████████████████████████████████████▊                          | 150/200 [1:35:12<31:52, 38.26s/it]save the CMUA-Watermark
+ 76%|███████████████████████████████████████████████████████████████████████████████▎                         | 151/200 [1:35:51<31:17, 38.31s/it]save the CMUA-Watermark
+ 76%|███████████████████████████████████████████████████████████████████████████████▊                         | 152/200 [1:36:29<30:42, 38.38s/it]save the CMUA-Watermark
+ 76%|████████████████████████████████████████████████████████████████████████████████▎                        | 153/200 [1:37:08<30:06, 38.43s/it]save the CMUA-Watermark
+ 77%|████████████████████████████████████████████████████████████████████████████████▊                        | 154/200 [1:37:47<29:30, 38.48s/it]save the CMUA-Watermark
+ 78%|█████████████████████████████████████████████████████████████████████████████████▍                       | 155/200 [1:38:25<28:55, 38.56s/it]save the CMUA-Watermark
+ 78%|█████████████████████████████████████████████████████████████████████████████████▉                       | 156/200 [1:39:04<28:16, 38.57s/it]save the CMUA-Watermark
+ 78%|██████████████████████████████████████████████████████████████████████████████████▍                      | 157/200 [1:39:42<27:38, 38.58s/it]save the CMUA-Watermark
+ 79%|██████████████████████████████████████████████████████████████████████████████████▉                      | 158/200 [1:40:22<27:11, 38.84s/it]save the CMUA-Watermark
+ 80%|███████████████████████████████████████████████████████████████████████████████████▍                     | 159/200 [1:41:00<26:29, 38.76s/it]save the CMUA-Watermark
+ 80%|████████████████████████████████████████████████████████████████████████████████████                     | 160/200 [1:41:39<25:49, 38.75s/it]save the CMUA-Watermark
+ 80%|████████████████████████████████████████████████████████████████████████████████████▌                    | 161/200 [1:42:18<25:07, 38.64s/it]save the CMUA-Watermark
+ 81%|█████████████████████████████████████████████████████████████████████████████████████                    | 162/200 [1:42:56<24:24, 38.55s/it]save the CMUA-Watermark
+ 82%|█████████████████████████████████████████████████████████████████████████████████████▌                   | 163/200 [1:43:34<23:42, 38.46s/it]save the CMUA-Watermark
+ 82%|██████████████████████████████████████████████████████████████████████████████████████                   | 164/200 [1:44:12<23:02, 38.39s/it]save the CMUA-Watermark
+ 82%|██████████████████████████████████████████████████████████████████████████████████████▋                  | 165/200 [1:44:51<22:23, 38.38s/it]save the CMUA-Watermark
+ 83%|███████████████████████████████████████████████████████████████████████████████████████▏                 | 166/200 [1:45:29<21:44, 38.36s/it]save the CMUA-Watermark
+ 84%|███████████████████████████████████████████████████████████████████████████████████████▋                 | 167/200 [1:46:07<21:04, 38.31s/it]save the CMUA-Watermark
+ 84%|████████████████████████████████████████████████████████████████████████████████████████▏                | 168/200 [1:46:46<20:27, 38.35s/it]save the CMUA-Watermark
+ 84%|████████████████████████████████████████████████████████████████████████████████████████▋                | 169/200 [1:47:24<19:48, 38.34s/it]save the CMUA-Watermark
+ 85%|█████████████████████████████████████████████████████████████████████████████████████████▎               | 170/200 [1:48:02<19:09, 38.30s/it]save the CMUA-Watermark
+ 86%|█████████████████████████████████████████████████████████████████████████████████████████▊               | 171/200 [1:48:40<18:30, 38.28s/it]save the CMUA-Watermark
+ 86%|██████████████████████████████████████████████████████████████████████████████████████████▎              | 172/200 [1:49:19<17:51, 38.25s/it]save the CMUA-Watermark
+ 86%|██████████████████████████████████████████████████████████████████████████████████████████▊              | 173/200 [1:49:57<17:12, 38.23s/it]save the CMUA-Watermark
+ 87%|███████████████████████████████████████████████████████████████████████████████████████████▎             | 174/200 [1:50:35<16:33, 38.23s/it]save the CMUA-Watermark
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████▉             | 175/200 [1:51:13<15:55, 38.22s/it]save the CMUA-Watermark
+ 88%|████████████████████████████████████████████████████████████████████████████████████████████▍            | 176/200 [1:51:51<15:16, 38.19s/it]save the CMUA-Watermark
+ 88%|████████████████████████████████████████████████████████████████████████████████████████████▉            | 177/200 [1:52:30<14:38, 38.18s/it]save the CMUA-Watermark
+ 89%|█████████████████████████████████████████████████████████████████████████████████████████████▍           | 178/200 [1:53:08<14:00, 38.19s/it]save the CMUA-Watermark
+ 90%|█████████████████████████████████████████████████████████████████████████████████████████████▉           | 179/200 [1:53:46<13:21, 38.19s/it]save the CMUA-Watermark
+ 90%|██████████████████████████████████████████████████████████████████████████████████████████████▌          | 180/200 [1:54:24<12:43, 38.18s/it]save the CMUA-Watermark
+ 90%|███████████████████████████████████████████████████████████████████████████████████████████████          | 181/200 [1:55:02<12:05, 38.19s/it]save the CMUA-Watermark
+ 91%|███████████████████████████████████████████████████████████████████████████████████████████████▌         | 182/200 [1:55:41<11:27, 38.20s/it]save the CMUA-Watermark
+ 92%|████████████████████████████████████████████████████████████████████████████████████████████████         | 183/200 [1:56:19<10:49, 38.23s/it]save the CMUA-Watermark
+ 92%|████████████████████████████████████████████████████████████████████████████████████████████████▌        | 184/200 [1:56:57<10:11, 38.24s/it]save the CMUA-Watermark
+ 92%|█████████████████████████████████████████████████████████████████████████████████████████████████▏       | 185/200 [1:57:35<09:33, 38.23s/it]save the CMUA-Watermark
+ 93%|█████████████████████████████████████████████████████████████████████████████████████████████████▋       | 186/200 [1:58:14<08:55, 38.23s/it]save the CMUA-Watermark
+ 94%|██████████████████████████████████████████████████████████████████████████████████████████████████▏      | 187/200 [1:58:52<08:17, 38.26s/it]save the CMUA-Watermark
+ 94%|██████████████████████████████████████████████████████████████████████████████████████████████████▋      | 188/200 [1:59:30<07:39, 38.26s/it]save the CMUA-Watermark
+ 94%|███████████████████████████████████████████████████████████████████████████████████████████████████▏     | 189/200 [2:00:08<07:00, 38.24s/it]save the CMUA-Watermark
+ 95%|███████████████████████████████████████████████████████████████████████████████████████████████████▊     | 190/200 [2:00:47<06:22, 38.25s/it]save the CMUA-Watermark
+ 96%|████████████████████████████████████████████████████████████████████████████████████████████████████▎    | 191/200 [2:01:25<05:44, 38.25s/it]save the CMUA-Watermark
+ 96%|████████████████████████████████████████████████████████████████████████████████████████████████████▊    | 192/200 [2:02:03<05:06, 38.35s/it]save the CMUA-Watermark
+ 96%|█████████████████████████████████████████████████████████████████████████████████████████████████████▎   | 193/200 [2:02:42<04:28, 38.35s/it]save the CMUA-Watermark
+ 97%|█████████████████████████████████████████████████████████████████████████████████████████████████████▊   | 194/200 [2:03:21<03:51, 38.65s/it]save the CMUA-Watermark
+ 98%|██████████████████████████████████████████████████████████████████████████████████████████████████▍  | 195/200 [3:42:51<2:31:29, 1817.96s/it]save the CMUA-Watermark
+ 98%|██████████████████████████████████████████████████████████████████████████████████████████████████▉  | 196/200 [3:43:30<1:25:37, 1284.40s/it]save the CMUA-Watermark
+ 98%|██████████████████████████████████████████████████████████████████████████████████████████████████████▍ | 197/200 [3:44:09<45:31, 910.64s/it]save the CMUA-Watermark
+ 99%|██████████████████████████████████████████████████████████████████████████████████████████████████████▉ | 198/200 [3:44:46<21:37, 648.58s/it]save the CMUA-Watermark
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████▍| 199/200 [3:45:23<07:45, 465.21s/it]save the CMUA-Watermark
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [3:46:01<00:00, 67.81s/it]
+The size of CMUA-Watermark:  torch.Size([3, 256, 256])
+HiDF 20 images. 
+L1 error: 0.038870152086019516. 
+L2 error: 0.0032456691842526197. 
+prop_dist: 0.0. 
+L0 error: 196607.90625. 
+L_-inf error: 2.186745433618853e-07.
+
+AttGAN 280 images. 
+L1 error: 0.0764501616358757. 
+L2 error: 0.017921043559908867. 
+prop_dist: 0.14642857142857144. 
+L0 error: 196607.96875. 
+L_-inf error: 5.457408747133741e-07.
+
+stargan 100 images. 
+L1 error: 0.1803458034992218. 
+L2 error: 0.059618156403303146. 
+prop_dist: 0.77. 
+L0 error: 196607.96875. 
+L_-inf error: 1.7067650333046913e-06.
+
+attentiongan 100 images. 
+L1 error: 0.12136559933423996. 
+L2 error: 0.052998751401901245. 
+prop_dist: 1.0. 
+L0 error: 196607.8125. 
+L_-inf error: 9.406358003616333e-08.
+
+Finished deepfake models initialization!
+finished init the attacked models, only attack 2 epochs
+  0%|                                                                                                                                                    | 0/200 [00:00<?, ?it/s]C:\anaconda3\envs\fake\lib\site-packages\torch\nn\functional.py:1967: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+save the CMUA-Watermark
+  0%|▋                                                                                                                                         | 1/200 [00:36<2:01:22, 36.59s/it]save the CMUA-Watermark
+  1%|█▍                                                                                                                                        | 2/200 [01:13<2:01:09, 36.72s/it]save the CMUA-Watermark
+  2%|██                                                                                                                                        | 3/200 [01:50<2:01:05, 36.88s/it]save the CMUA-Watermark
+  2%|██▊                                                                                                                                       | 4/200 [02:27<2:00:47, 36.98s/it]save the CMUA-Watermark
+  2%|███▍                                                                                                                                      | 5/200 [03:05<2:00:43, 37.15s/it]save the CMUA-Watermark
+  3%|████▏                                                                                                                                     | 6/200 [03:42<2:00:45, 37.35s/it]save the CMUA-Watermark
+  4%|████▊                                                                                                                                     | 7/200 [04:20<2:00:44, 37.54s/it]save the CMUA-Watermark
+  4%|█████▌                                                                                                                                    | 8/200 [04:58<2:00:37, 37.70s/it]save the CMUA-Watermark
+  4%|██████▏                                                                                                                                   | 9/200 [05:36<2:00:29, 37.85s/it]save the CMUA-Watermark
+  5%|██████▊                                                                                                                                  | 10/200 [06:15<2:00:13, 37.96s/it]save the CMUA-Watermark
+  6%|███████▌                                                                                                                                 | 11/200 [06:53<1:59:55, 38.07s/it]save the CMUA-Watermark
+  6%|████████▏                                                                                                                                | 12/200 [07:31<1:59:36, 38.18s/it]save the CMUA-Watermark
+  6%|████████▉                                                                                                                                | 13/200 [08:10<1:59:10, 38.24s/it]save the CMUA-Watermark
+  7%|█████████▌                                                                                                                               | 14/200 [08:48<1:58:42, 38.29s/it]save the CMUA-Watermark
+  8%|██████████▎                                                                                                                              | 15/200 [09:27<1:58:13, 38.34s/it]save the CMUA-Watermark
+  8%|██████████▉                                                                                                                              | 16/200 [10:05<1:57:45, 38.40s/it]save the CMUA-Watermark
+  8%|███████████▋                                                                                                                             | 17/200 [10:44<1:57:15, 38.45s/it]save the CMUA-Watermark
+  9%|████████████▎                                                                                                                            | 18/200 [11:22<1:56:44, 38.49s/it]save the CMUA-Watermark
+ 10%|█████████████                                                                                                                            | 19/200 [12:01<1:56:12, 38.52s/it]save the CMUA-Watermark
+ 10%|█████████████▋                                                                                                                           | 20/200 [12:40<1:55:43, 38.57s/it]save the CMUA-Watermark
+ 10%|██████████████▍                                                                                                                          | 21/200 [13:18<1:55:05, 38.58s/it]save the CMUA-Watermark
+ 11%|███████████████                                                                                                                          | 22/200 [13:57<1:54:26, 38.58s/it]save the CMUA-Watermark
+ 12%|███████████████▊                                                                                                                         | 23/200 [14:35<1:53:48, 38.58s/it]save the CMUA-Watermark
+ 12%|████████████████▍                                                                                                                        | 24/200 [15:14<1:53:10, 38.58s/it]save the CMUA-Watermark
+ 12%|█████████████████▏                                                                                                                       | 25/200 [15:53<1:52:37, 38.61s/it]save the CMUA-Watermark
+ 13%|█████████████████▊                                                                                                                       | 26/200 [16:31<1:51:59, 38.62s/it]save the CMUA-Watermark
+ 14%|██████████████████▍                                                                                                                      | 27/200 [17:10<1:51:20, 38.61s/it]save the CMUA-Watermark
+ 14%|███████████████████▏                                                                                                                     | 28/200 [17:49<1:50:45, 38.64s/it]save the CMUA-Watermark
+ 14%|███████████████████▊                                                                                                                     | 29/200 [18:27<1:50:11, 38.66s/it]save the CMUA-Watermark
+ 15%|████████████████████▌                                                                                                                    | 30/200 [19:06<1:49:34, 38.67s/it]save the CMUA-Watermark
+ 16%|█████████████████████▏                                                                                                                   | 31/200 [19:45<1:48:56, 38.68s/it]save the CMUA-Watermark
+ 16%|█████████████████████▉                                                                                                                   | 32/200 [20:23<1:48:19, 38.68s/it]save the CMUA-Watermark
+ 16%|██████████████████████▌                                                                                                                  | 33/200 [21:02<1:47:40, 38.68s/it]save the CMUA-Watermark
+ 17%|███████████████████████▎                                                                                                                 | 34/200 [21:41<1:47:07, 38.72s/it]save the CMUA-Watermark
+ 18%|███████████████████████▉                                                                                                                 | 35/200 [22:20<1:46:29, 38.72s/it]save the CMUA-Watermark
+ 18%|████████████████████████▋                                                                                                                | 36/200 [22:58<1:45:53, 38.74s/it]save the CMUA-Watermark
+ 18%|█████████████████████████▎                                                                                                               | 37/200 [23:37<1:45:11, 38.72s/it]save the CMUA-Watermark
+ 19%|██████████████████████████                                                                                                               | 38/200 [24:16<1:44:29, 38.70s/it]save the CMUA-Watermark
+ 20%|██████████████████████████▋                                                                                                              | 39/200 [24:54<1:43:50, 38.70s/it]save the CMUA-Watermark
+ 20%|███████████████████████████▍                                                                                                             | 40/200 [25:33<1:43:09, 38.68s/it]save the CMUA-Watermark
+ 20%|████████████████████████████                                                                                                             | 41/200 [26:12<1:42:27, 38.66s/it]save the CMUA-Watermark
+ 21%|████████████████████████████▊                                                                                                            | 42/200 [26:50<1:41:45, 38.64s/it]save the CMUA-Watermark
+ 22%|█████████████████████████████▍                                                                                                           | 43/200 [27:29<1:41:05, 38.63s/it]save the CMUA-Watermark
+ 22%|██████████████████████████████▏                                                                                                          | 44/200 [28:08<1:40:28, 38.64s/it]save the CMUA-Watermark
+ 22%|██████████████████████████████▊                                                                                                          | 45/200 [28:46<1:39:47, 38.63s/it]save the CMUA-Watermark
+ 23%|███████████████████████████████▌                                                                                                         | 46/200 [29:25<1:39:06, 38.61s/it]save the CMUA-Watermark
+ 24%|████████████████████████████████▏                                                                                                        | 47/200 [30:03<1:38:28, 38.62s/it]save the CMUA-Watermark
+ 24%|████████████████████████████████▉                                                                                                        | 48/200 [30:42<1:37:54, 38.65s/it]save the CMUA-Watermark
+ 24%|█████████████████████████████████▌                                                                                                       | 49/200 [31:21<1:37:16, 38.65s/it]save the CMUA-Watermark
+ 25%|██████████████████████████████████▎                                                                                                      | 50/200 [31:59<1:36:36, 38.64s/it]save the CMUA-Watermark
+ 26%|██████████████████████████████████▉                                                                                                      | 51/200 [32:38<1:35:59, 38.65s/it]save the CMUA-Watermark
+ 26%|███████████████████████████████████▌                                                                                                     | 52/200 [33:17<1:35:19, 38.64s/it]save the CMUA-Watermark
+ 26%|████████████████████████████████████▎                                                                                                    | 53/200 [33:55<1:34:39, 38.64s/it]save the CMUA-Watermark
+ 27%|████████████████████████████████████▉                                                                                                    | 54/200 [34:34<1:34:02, 38.65s/it]save the CMUA-Watermark
+ 28%|█████████████████████████████████████▋                                                                                                   | 55/200 [35:13<1:33:21, 38.63s/it]save the CMUA-Watermark
+ 28%|██████████████████████████████████████▎                                                                                                  | 56/200 [35:51<1:32:42, 38.63s/it]save the CMUA-Watermark
+ 28%|███████████████████████████████████████                                                                                                  | 57/200 [36:30<1:32:04, 38.64s/it]save the CMUA-Watermark
+ 29%|███████████████████████████████████████▋                                                                                                 | 58/200 [37:08<1:31:27, 38.64s/it]save the CMUA-Watermark
+ 30%|████████████████████████████████████████▍                                                                                                | 59/200 [37:47<1:30:47, 38.64s/it]save the CMUA-Watermark
+ 30%|█████████████████████████████████████████                                                                                                | 60/200 [38:26<1:30:08, 38.63s/it]save the CMUA-Watermark
+ 30%|█████████████████████████████████████████▊                                                                                               | 61/200 [39:04<1:29:29, 38.63s/it]save the CMUA-Watermark
+ 31%|██████████████████████████████████████████▍                                                                                              | 62/200 [39:43<1:28:54, 38.66s/                          | 63/200 [40:22<1:28:18, 38.68s/it]save the CMUA-Watermark
+ 32%|███████████████████████████████████████████▊                                                                                             | 64/200 [41:00<1:27:39, 38.68s/it]save the CMUA-Watermark
+ 32%|████████████████████████████████████████████▌                                                                                            | 65/200 [41:39<1:26:59, 38.66s/it]save the CMUA-Watermark
+ 33%|█████████████████████████████████████████████▏                                                                                           | 66/200 [42:18<1:26:20, 38.66s/it]save the CMUA-Watermark
+ 34%|█████████████████████████████████████████████▉                                                                                           | 67/200 [42:56<1:25:42, 38.67s/it]save the CMUA-Watermark
+ 34%|██████████████████████████████████████████████▌                                                                                          | 68/200 [43:35<1:25:06, 38.69s/it]save the CMUA-Watermark
+ 34%|███████████████████████████████████████████████▎                                                                                         | 69/200 [44:14<1:24:26, 38.67s/it]save the CMUA-Watermark
+ 35%|███████████████████████████████████████████████▉                                                                                         | 70/200 [44:52<1:23:44, 38.65s/it]save the CMUA-Watermark
+ 36%|████████████████████████████████████████████████▋                                                                                        | 71/200 [45:31<1:23:06, 38.66s/it]save the CMUA-Watermark
+ 36%|█████████████████████████████████████████████████▎                                                                                       | 72/200 [46:10<1:22:28, 38.66s/it]save the CMUA-Watermark
+ 36%|██████████████████████████████████████████████████                                                                                       | 73/200 [46:48<1:21:51, 38.68s/it]save the CMUA-Watermark
+ 37%|██████████████████████████████████████████████████▋                                                                                      | 74/200 [47:27<1:21:11, 38.67s/it]save the CMUA-Watermark
+ 38%|███████████████████████████████████████████████████▍                                                                                     | 75/200 [48:06<1:20:35, 38.68s/it]save the CMUA-Watermark
+ 38%|████████████████████████████████████████████████████                                                                                     | 76/200 [48:45<1:19:59, 38.70s/it]save the CMUA-Watermark
+ 38%|████████████████████████████████████████████████████▋                                                          
+                          | 77/200 [49:24<1:19:33, 38.81s/it]save the CMUA-Watermark
+ 39%|█████████████████████████████████████████████████████▍                                                         
+                          | 78/200 [50:02<1:18:52, 38.79s/it]save the CMUA-Watermark
+ 40%|██████████████████████████████████████████████████████                                                         
+                          | 79/200 [50:41<1:18:10, 38.76s/it]save the CMUA-Watermark
+ 40%|██████████████████████████████████████████████████████▊                                                        
+                          | 80/200 [51:20<1:17:26, 38.72s/it]save the CMUA-Watermark
+ 40%|███████████████████████████████████████████████████████▍                                                       
+                          | 81/200 [51:58<1:16:47, 38.72s/it]save the CMUA-Watermark
+ 41%|████████████████████████████████████████████████████████▏                                                      
+                          | 82/200 [52:37<1:16:06, 38.70s/it]save the CMUA-Watermark
+ 42%|████████████████████████████████████████████████████████▊                                                      
+                          | 83/200 [53:16<1:15:25, 38.68s/it]save the CMUA-Watermark
+ 42%|█████████████████████████████████████████████████████████▌                                                     
+                          | 84/200 [53:54<1:14:45, 38.67s/it]save the CMUA-Watermark
+ 42%|██████████████████████████████████████████████████████████▏                                                    
+                          | 85/200 [54:33<1:14:07, 38.67s/it]save the CMUA-Watermark
+ 43%|██████████████████████████████████████████████████████████▉                                                    
+                          | 86/200 [55:12<1:13:26, 38.66s/it]save the CMUA-Watermark
+ 44%|███████████████████████████████████████████████████████████▌                                                   
+                          | 87/200 [55:50<1:12:45, 38.64s/it]save the CMUA-Watermark
+ 44%|████████████████████████████████████████████████████████████▎                                                  
+                          | 88/200 [56:29<1:12:05, 38.62s/it]save the CMUA-Watermark
+ 44%|████████████████████████████████████████████████████████████▉                                                  
+                          | 89/200 [57:07<1:11:26, 38.62s/it]save the CMUA-Watermark
+ 45%|█████████████████████████████████████████████████████████████▋                                                 
+                          | 90/200 [57:46<1:10:48, 38.62s/it]save the CMUA-Watermark
+ 46%|██████████████████████████████████████████████████████████████▎                                                
+                          | 91/200 [58:25<1:10:06, 38.59s/it]save the CMUA-Watermark
+ 46%|███████████████████████████████████████████████████████████████                                                
+                          | 92/200 [59:03<1:09:26, 38.58s/it]save the CMUA-Watermark
+ 46%|███████████████████████████████████████████████████████████████▋                                               
+                          | 93/200 [59:42<1:08:47, 38.58s/it]save the CMUA-Watermark
+ 47%|███████████████████████████████████████████████████████████████▍                                               
+                        | 94/200 [1:00:20<1:08:09, 38.58s/it]save the CMUA-Watermark
+ 48%|████████████████████████████████████████████████████████████████▏                                              
+                        | 95/200 [1:00:59<1:07:31, 38.59s/it]save the CMUA-Watermark
+ 48%|████████████████████████████████████████████████████████████████▊                                              
+                        | 96/200 [1:01:37<1:06:52, 38.59s/it]save the CMUA-Watermark
+ 48%|█████████████████████████████████████████████████████████████████▍                                             
+                        | 97/200 [1:02:16<1:06:12, 38.57s/it]save the CMUA-Watermark
+ 49%|██████████████████████████████████████████████████████████████████▏                                            
+                        | 98/200 [1:02:55<1:05:33, 38.57s/it]save the CMUA-Watermark
+ 50%|██████████████████████████████████████████████████████████████████▊                                            
+                        | 99/200 [1:03:33<1:04:52, 38.54s/it]save the CMUA-Watermark
+ 50%|███████████████████████████████████████████████████████████████████                                            
+                       | 100/200 [1:04:12<1:04:17, 38.57s/it]save the CMUA-Watermark
+ 50%|███████████████████████████████████████████████████████████████████▋                                           
+                       | 101/200 [1:04:50<1:03:39, 38.58s/it]save the CMUA-Watermark
+ 51%|████████████████████████████████████████████████████████████████████▎                                          
+                       | 102/200 [1:05:29<1:03:02, 38.59s/it]save the CMUA-Watermark
+ 52%|█████████████████████████████████████████████████████████████████████                                          
+                       | 103/200 [1:06:07<1:02:21, 38.58s/it]save the CMUA-Watermark
+ 52%|█████████████████████████████████████████████████████████████████████▋                                         
+                       | 104/200 [1:06:46<1:01:43, 38.58s/it]save the CMUA-Watermark
+ 52%|██████████████████████████████████████████████████████████████████████▎                                        
+                       | 105/200 [1:07:25<1:01:05, 38.58s/it]save the CMUA-Watermark
+ 53%|███████████████████████████████████████████████████████████████████████                                        
+                       | 106/200 [1:08:03<1:00:28, 38.60s/it]save the CMUA-Watermark
+ 54%|████████████████████████████████████████████████████████████████████████▊                                      
+                         | 107/200 [1:08:42<59:49, 38.60s/it]save the CMUA-Watermark
+ 54%|█████████████████████████████████████████████████████████████████████████▍                                     
+                         | 108/200 [1:09:20<59:11, 38.60s/it]save the CMUA-Watermark
+ 55%|██████████████████████████████████████████████████████████████████████████                                     
+                         | 109/200 [1:09:59<58:32, 38.60s/it]save the CMUA-Watermark
+ 55%|██████████████████████████████████████████████████████████████████████████▊                                    
+                         | 110/200 [1:10:38<57:53, 38.60s/it]save the CMUA-Watermark
+ 56%|███████████████████████████████████████████████████████████████████████████▍                                   
+                         | 111/200 [1:11:16<57:14, 38.59s/it]save the CMUA-Watermark
+ 56%|████████████████████████████████████████████████████████████████████████████▏                                  
+                         | 112/200 [1:11:55<56:35, 38.58s/it]save the CMUA-Watermark
+ 56%|████████████████████████████████████████████████████████████████████████████▊                                  
+                         | 113/200 [1:12:33<55:59, 38.61s/it]save the CMUA-Watermark
+ 57%|█████████████████████████████████████████████████████████████████████████████▌                                 
+                         | 114/200 [1:13:12<55:20, 38.62s/it]save the CMUA-Watermark
+ 57%|██████████████████████████████████████████████████████████████████████████████▏                                
+                         | 115/200 [1:13:51<54:41, 38.61s/it]save the CMUA-Watermark
+ 58%|██████████████████████████████████████████████████████████████████████████████▉                                
+                         | 116/200 [1:14:29<54:03, 38.61s/it]save the CMUA-Watermark
+ 58%|███████████████████████████████████████████████████████████████████████████████▌                               
+                         | 117/200 [1:15:08<53:24, 38.61s/it]save the CMUA-Watermark
+ 59%|████████████████████████████████████████████████████████████████████████████████▏                              
+                         | 118/200 [1:15:47<52:48, 38.63s/it]save the CMUA-Watermark
+ 60%|████████████████████████████████████████████████████████████████████████████████▉                              
+                         | 119/200 [1:16:25<52:11, 38.66s/it]save the CMUA-Watermark
+ 60%|█████████████████████████████████████████████████████████████████████████████████▌                             
+                         | 120/200 [1:17:04<51:33, 38.66s/it]save the CMUA-Watermark
+ 60%|██████████████████████████████████████████████████████████████████████████████████▎                            
+                         | 121/200 [1:17:43<50:54, 38.67s/it]save the CMUA-Watermark
+ 61%|██████████████████████████████████████████████████████████████████████████████████▉                            
+                         | 122/200 [1:18:21<50:14, 38.65s/it]save the CMUA-Watermark
+ 62%|███████████████████████████████████████████████████████████████████████████████████▋                           
+                         | 123/200 [1:19:00<49:36, 38.66s/it]save the CMUA-Watermark
+ 62%|████████████████████████████████████████████████████████████████████████████████████▎                          
+                         | 124/200 [1:19:39<49:00, 38.69s/it]save the CMUA-Watermark
+ 62%|█████████████████████████████████████████████████████████████████████████████████████                          
+                         | 125/200 [1:20:17<48:22, 38.70s/it]save the CMUA-Watermark
+ 63%|█████████████████████████████████████████████████████████████████████████████████████▋                         
+                         | 126/200 [1:20:56<47:43, 38.70s/it]save the CMUA-Watermark
+ 64%|██████████████████████████████████████████████████████████████████████████████████████▎                        
+                         | 127/200 [1:21:35<47:04, 38.69s/it]save the CMUA-Watermark
+ 64%|███████████████████████████████████████████████████████████████████████████████████████                        
+                         | 128/200 [1:22:14<46:29, 38.74s/it]save the CMUA-Watermark
+ 64%|███████████████████████████████████████████████████████████████████████████████████████▋                       
+                         | 129/200 [1:22:52<45:50, 38.74s/it]save the CMUA-Watermark
+ 65%|████████████████████████████████████████████████████████████████████████████████████████▍                      
+                         | 130/200 [1:23:31<45:10, 38.72s/it]save the CMUA-Watermark
+ 66%|█████████████████████████████████████████████████████████████████████████████████████████                      
+                         | 131/200 [1:24:10<44:30, 38.71s/it]save the CMUA-Watermark
+ 66%|█████████████████████████████████████████████████████████████████████████████████████████▊                     
+                         | 132/200 [1:24:48<43:50, 38.69s/it]save the CMUA-Watermark
+ 66%|██████████████████████████████████████████████████████████████████████████████████████████▍                    
+                         | 133/200 [1:25:27<43:11, 38.68s/it]save the CMUA-Watermark
+ 67%|███████████████████████████████████████████████████████████████████████████████████████████                    
+                         | 134/200 [1:26:06<42:31, 38.66s/it]save the CMUA-Watermark
+ 68%|███████████████████████████████████████████████████████████████████████████████████████████▊                   
+                         | 135/200 [1:26:44<41:52, 38.66s/it]save the CMUA-Watermark
+ 68%|████████████████████████████████████████████████████████████████████████████████████████████▍                  
+                         | 136/200 [1:27:23<41:13, 38.65s/it]save the CMUA-Watermark
+ 68%|█████████████████████████████████████████████████████████████████████████████████████████████▏                 
+                         | 137/200 [1:28:02<40:36, 38.67s/it]save the CMUA-Watermark
+ 69%|█████████████████████████████████████████████████████████████████████████████████████████████▊                 
+                         | 138/200 [1:28:40<39:56, 38.66s/it]save the CMUA-Watermark
+ 70%|██████████████████████████████████████████████████████████████████████████████████████████████▌                
+                         | 139/200 [1:29:19<39:19, 38.69s/it]save the CMUA-Watermark
+ 70%|███████████████████████████████████████████████████████████████████████████████████████████████▏               
+                         | 140/200 [1:29:58<38:41, 38.69s/it]save the CMUA-Watermark
+ 70%|███████████████████████████████████████████████████████████████████████████████████████████████▉               
+                         | 141/200 [1:30:36<38:02, 38.68s/it]save the CMUA-Watermark
+ 71%|████████████████████████████████████████████████████████████████████████████████████████████████▌              
+                         | 142/200 [1:31:15<37:25, 38.71s/it]save the CMUA-Watermark
+ 72%|█████████████████████████████████████████████████████████████████████████████████████████████████▏             
+                         | 143/200 [1:31:54<36:45, 38.69s/it]save the CMUA-Watermark
+ 72%|█████████████████████████████████████████████████████████████████████████████████████████████████▉             
+                         | 144/200 [1:32:32<36:06, 38.68s/it]save the CMUA-Watermark
+ 72%|██████████████████████████████████████████████████████████████████████████████████████████████████▌            
+                         | 145/200 [1:33:11<35:25, 38.64s/it]save the CMUA-Watermark
+ 73%|███████████████████████████████████████████████████████████████████████████████████████████████████▎           
+                         | 146/200 [1:33:50<34:45, 38.62s/it]save the CMUA-Watermark
+ 74%|███████████████████████████████████████████████████████████████████████████████████████████████████▉           
+                         | 147/200 [1:34:28<34:06, 38.62s/it]save the CMUA-Watermark
+ 74%|████████████████████████████████████████████████████████████████████████████████████████████████████▋          
+                         | 148/200 [1:35:07<33:27, 38.61s/it]save the CMUA-Watermark
+ 74%|█████████████████████████████████████████████████████████████████████████████████████████████████████▎         
+                         | 149/200 [1:35:45<32:49, 38.62s/it]save the CMUA-Watermark
+ 75%|██████████████████████████████████████████████████████████████████████████████████████████████████████         
+                         | 150/200 [1:36:24<32:10, 38.61s/it]save the CMUA-Watermark
+ 76%|██████████████████████████████████████████████████████████████████████████████████████████████████████▋                                 | 151/200 [1:37:03<31:32, 38.62s/it]save the CMUA-Watermark
+ 76%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎                                | 152/200 [1:37:41<30:52, 38.60s/it]save the CMUA-Watermark
+ 76%|████████████████████████████████████████████████████████████████████████████████████████████████████████                                | 153/200 [1:38:20<30:14, 38.60s/it]save the CMUA-Watermark
+ 77%|████████████████████████████████████████████████████████████████████████████████████████████████████████▋                               | 154/200 [1:38:58<29:35, 38.60s/it]save the CMUA-Watermark
+ 78%|█████████████████████████████████████████████████████████████████████████████████████████████████████████▍                              | 155/200 [1:39:37<28:56, 38.60s/it]save the CMUA-Watermark
+ 78%|██████████████████████████████████████████████████████████████████████████████████████████████████████████                              | 156/200 [1:40:16<28:20, 38.65s/it]save the CMUA-Watermark
+ 78%|██████████████████████████████████████████████████████████████████████████████████████████████████████████▊                             | 157/200 [1:40:54<27:42, 38.66s/it]save the CMUA-Watermark
+ 79%|███████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 158/200 [1:41:33<27:05, 38.70s/it]save the CMUA-Watermark
+ 80%|████████████████████████████████████████████████████████████████████████████████████████████████████████████                            | 159/200 [1:42:12<26:27, 38.71s/it]save the CMUA-Watermark
+ 80%|████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                           | 160/200 [1:42:51<25:48, 38.72s/it]save the CMUA-Watermark
+ 80%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                          | 161/200 [1:43:29<25:10, 38.72s/it]save the CMUA-Watermark
+ 81%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                         | 162/200 [1:44:08<24:32, 38.75s/it]save the CMUA-Watermark
+ 82%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                         | 163/200 [1:44:47<23:55, 38.78s/it]save the CMUA-Watermark
+ 82%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                        | 164/200 [1:45:26<23:15, 38.76s/it]save the CMUA-Watermark
+ 82%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                       | 165/200 [1:46:05<22:39, 38.85s/it]save the CMUA-Watermark
+ 83%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                       | 166/200 [1:46:44<22:00, 38.83s/it]save the CMUA-Watermark
+ 84%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                      | 167/200 [1:47:22<21:19, 38.77s/it]save the CMUA-Watermark
+ 84%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                     | 168/200 [1:48:01<20:39, 38.73s/it]save the CMUA-Watermark
+ 84%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                     | 169/200 [1:48:40<19:59, 38.71s/it]save the CMUA-Watermark
+ 85%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                    | 170/200 [1:49:18<19:20, 38.69s/it]save the CMUA-Watermark
+ 86%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                   | 171/200 [1:49:57<18:41, 38.67s/it]save the CMUA-Watermark
+ 86%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                   | 172/200 [1:50:36<18:02, 38.67s/it]save the CMUA-Watermark
+ 86%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                  | 173/200 [1:51:14<17:24, 38.70s/it]save the CMUA-Watermark
+ 87%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                 | 174/200 [1:51:53<16:47, 38.74s/it]save the CMUA-Watermark
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                 | 175/200 [1:52:32<16:09, 38.78s/it]save the CMUA-Watermark
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                | 176/200 [1:53:11<15:30, 38.78s/it]save the CMUA-Watermark
+ 88%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎               | 177/200 [1:53:50<14:51, 38.77s/it]s 96%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌     | 192/200 [2:03:31<05:10, 38.82s/it]save the CMUA-Watermark
+ 96%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏    | 193/200 [2:04:10<04:31, 38.83s/it]save the CMUA-Watermark
+ 97%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉    | 194/200 [2:04:49<03:53, 38.84s/it]save the CMUA-Watermark
+ 98%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌   | 195/200 [2:05:28<03:14, 38.85s/it]save the CMUA-Watermark
+ 98%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎  | 196/200 [2:06:07<02:35, 38.85s/it]save the CMUA-Watermark
+ 98%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉  | 197/200 [2:06:46<01:56, 38.85s/it]save the CMUA-Watermark
+ 99%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋ | 198/200 [2:07:24<01:17, 38.87s/it]save the CMUA-Watermark
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎| 199/200 [2:08:03<00:38, 38.87s/it]save the CMUA-Watermark
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [2:08:42<00:00, 38.82s/100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [2:08:42<00:00, 38.61s/it]     
+The size of CMUA-Watermark:  torch.Size([3, 256, 256])
+HiDF 20 images. L1 error: 0.039053093641996384. L2 error: 0.0032995014917105436. prop_dist: 0.0. L0 error: 196607.859375. L_-inf error: 1.7508864402770996e-07.
+AttGAN 280 images. L1 error: 0.07691614329814911. L2 error: 0.01812746189534664. prop_dist: 0.15714285714285714. L0 error: 196607.96875. L_-inf error: 4.712891268354724e-07.     
+stargan 100 images. L1 error: 0.2147248387336731. L2 error: 0.07852237671613693. prop_dist: 0.82. L0 error: 196607.96875. L_-inf error: 2.1483097043528687e-06.
+attentiongan 100 images. L1 error: 0.12093480676412582. L2 error: 0.05293777212500572. prop_dist: 1.0. L0 error: 196607.0. L_-inf error: 8.381902949494702e-10.
+
+
+finished init the attacked models
+AttGAN 14 images. 
+L1 error: 0.06798049807548523. 
+L2 error: 0.010546640492975712. 
+prop_dist: 0.0. 
+L0 error: 196607.859375. 
+L_-inf error: 2.07551892117408e-07.
+
+stargan 5 images. 
+L1 error: 0.1518823206424713. 
+L2 error: 0.04323967918753624. 
+prop_dist: 0.2. 
+L0 error: 196607.796875. 
+L_-inf error: 5.185603981772147e-07.
+
+attentiongan 5 images. 
+L1 error: 0.10796184837818146. 
+L2 error: 0.03265092149376869. 
+prop_dist: 0.2. 
+L0 error: 196607.609375. 
+L_-inf error: 1.1920928955078125e-07.
+
+HiDF 1 images. 
+L1 error: 0.04983925819396973. 
+L2 error: 0.004438519943505526. 
+prop_dist: 0.0. 
+L0 error: 196608.0. 
+L_-inf error: 1.7881393432617188e-07.
+
+The size of CMUA-Watermark:  torch.Size([3, 256, 256])
+HiDF 128 images. 
+L1 error: 0.040392857044935226. 
+L2 error: 0.003546412568539381. 
+prop_dist: 0.015625. 
+L0 error: 196607.875. 
+L_-inf error: 2.592278178781271e-07.
+
+AttGAN 280 images. 
+L1 error: 0.0801176130771637. 
+L2 error: 0.020784415304660797. 
+prop_dist: 0.19642857142857142. 
+L0 error: 196607.96875. 
+L_-inf error: 5.285987185743579e-07.
+
+stargan 100 images. 
+L1 error: 0.22067005932331085. 
+L2 error: 0.08033934235572815. 
+prop_dist: 0.9. L0 error: 196607.96875. 
+L_-inf error: 2.6970740236720303e-06.
+
+attentiongan 100 images. 
+L1 error: 0.11454805731773376. 
+L2 error: 0.04462447389960289. 
+prop_dist: 1.0. 
+L0 error: 196606.953125. 
+L_-inf error: 1.19209286886246e-09.
