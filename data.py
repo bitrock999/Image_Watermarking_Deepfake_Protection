@@ -26,14 +26,14 @@ class CelebA(data.Dataset):
         labels = np.loadtxt(attr_path, skiprows=2, usecols=atts, dtype=np.int)
         
         if mode == 'train':
-            self.images = images[:500]  # Mengambil 500 gambar pertama untuk mode train
-            self.labels = labels[:500]  # Mengambil 500 label pertama untuk mode train
+            self.images = images[:512]  # Mengambil 500 gambar pertama untuk mode train
+            self.labels = labels[:512]  # Mengambil 500 label pertama untuk mode train
         if mode == 'valid':
-            self.images = images[128:872]  # Mengambil gambar ke-128 hingga ke-871 untuk mode valid
-            self.labels = labels[128:872]  # Mengambil label ke-128 hingga ke-871 untuk mode valid
+            self.images = images[512:800]  # Mengambil gambar ke-128 hingga ke-871 untuk mode valid
+            self.labels = labels[512:800]  # Mengambil label ke-128 hingga ke-871 untuk mode valid
         if mode == 'test':
-            self.images = images[500:]  # Mengambil gambar setelah 500 untuk mode test
-            self.labels = labels[500:]  # Mengambil label setelah 500 untuk mode test
+            self.images = images[800:]  # Mengambil gambar setelah 500 untuk mode test
+            self.labels = labels[800:]  # Mengambil label setelah 500 untuk mode test
         
         # Definisikan transformasi gambar
         self.tf = transforms.Compose([
@@ -61,7 +61,7 @@ class CelebA(data.Dataset):
             self.attr2idx[attr_name] = i
             self.idx2attr[i] = attr_name
 
-        lines = lines[500:]
+        lines = lines[512:]
         for i, line in enumerate(lines):
             split = line.split()
             filename = split[0]

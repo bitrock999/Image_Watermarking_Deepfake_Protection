@@ -66,7 +66,7 @@ pgd_attack = init_Attack(args_attack)
 
 # Load existing perturbation
 if args_attack.global_settings.universal_perturbation_path:
-     pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
+    pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
 
 
 # init the attacker models

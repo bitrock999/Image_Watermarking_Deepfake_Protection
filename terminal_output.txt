@@ -1160,3 +1160,172 @@ L2 error: 0.04462447389960289.
 prop_dist: 1.0. 
 L0 error: 196606.953125. 
 L_-inf error: 1.19209286886246e-09.
+
+
+HiDF 200 images. 
+L1 error: 0.21385018527507782. 
+L2 error: 0.10333698987960815. 
+prop_dist: 0.96. 
+L0 error: 196607.96875. 
+L_-inf error: 6.615184133806906e-07.
+
+AttGAN 2800 images. 
+L1 error: 0.1412549763917923. 
+L2 error: 0.061262428760528564. 
+prop_dist: 0.9917857142857143. 
+L0 error: 196608.0. 
+L_-inf error: 1.259732471226016e-06.
+
+stargan 1000 images. 
+L1 error: 0.44981762766838074. 
+L2 error: 0.31819218397140503. 
+prop_dist: 1.0. 
+L0 error: 196608.015625.
+L_-inf error: 3.154012574668741e-06.
+
+attentiongan 1000 images. 
+L1 error: 0.24740567803382874. 
+L2 error: 0.12217805534601212. 
+prop_dist: 1.0. 
+L0 error: 196608.015625. 
+L_-inf error: 2.7769619919126853e-06.
+
+Finished deepfake models initialization!
+finished init the attacked models
+The size of CMUA-Watermark:  torch.Size([3, 256, 256])
+HiDF 128 images. 
+L1 error: 0.2145865261554718. 
+L2 error: 0.10410268604755402. 
+prop_dist: 0.9765625. 
+L0 error: 196607.96875. 
+L_-inf error: 6.814661901444197e-07.
+
+AttGAN 1792 images. 
+L1 error: 0.1427307426929474. 
+L2 error: 0.06262423098087311. 
+prop_dist: 0.9933035714285714. 
+L0 error: 196608.015625. 
+L_-inf error: 1.2485314755394938e-06.
+
+stargan 640 images. 
+L1 error: 0.4502262771129608. 
+L2 error: 0.3191116750240326. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 3.1505799142905744e-06.
+
+attentiongan 640 images. 
+L1 error: 0.24762952327728271. 
+L2 error: 0.12283860892057419. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 2.772410653051338e-06.
+
+
+
+Finished deepfake models initialization!
+finished init the attacked models
+
+input citra frame_det_00_000001.jpg
+
+AttGAN 14 images. 
+L1 error: 0.16899822652339935. 
+L2 error: 0.06005794554948807. 
+prop_dist: 0.35714285714285715. 
+L0 error: 196608.015625. 
+L_-inf error: 1.3506838740795502e-06.
+
+stargan 5 images. 
+L1 error: 0.3947930634021759. 
+L2 error: 0.2543812692165375. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 2.944469542853767e-06.
+
+
+attentiongan 5 images. 
+L1 error: 0.28060588240623474. 
+L2 error: 0.17063145339488983. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 2.2292138055490796e-06.
+
+HiDF 1 images. 
+L1 error: 0.23668023943901062. 
+L2 error: 0.12822872400283813. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 1.7881393432617188e-07.
+
+
+input 128 citra dari dataset
+
+HiDF 128 images. 
+L1 error: 0.2145865261554718. 
+L2 error: 0.10410268604755402. 
+prop_dist: 0.9765625. 
+L0 error: 196607.96875. 
+L_-inf error: 6.814661901444197e-07.
+HiDF_prop_dist : 0.9765625
+
+AttGAN 1792 images. 
+L1 error: 0.1427307426929474. 
+L2 error: 0.06262423098087311. 
+prop_dist: 0.9933035714285714. 
+L0 error: 196608.015625. 
+L_-inf error: 1.2493630947574275e-06.
+
+stargan 640 images. 
+L1 error: 0.4502262771129608. 
+L2 error: 0.3191116750240326. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 3.1506672257819446e-06.
+
+attentiongan 640 images. 
+L1 error: 0.24762952327728271. 
+L2 error: 0.12283860892057419. 
+prop_dist: 1.0. 
+L0 error: 196608.0. 
+L_-inf error: 2.772256266325712e-06.
+
+
+AttGAN 14 images.                                       AttGAN 14 images. 
+L1 error: 0.16899821162223816.                          L1 error: 0.203175887465477.
+L2 error: 0.06005794554948807.                          L2 error: 0.09307937324047089. 
+prop_dist: 0.35714285714285715.                         prop_dist: 1.0. 
+L0 error: 196608.015625.                                L0 error: 196608.015625. 
+L_-inf error: 1.367713821309735e-06.                    L_-inf error: 1.2463757457226166e-06.
+
+
+
+stargan 5 images.                                        `stargan 5 images. 
+L1 error: 0.3947930634021759.                             L1 error: 0.37119466066360474.
+L2 error: 0.2543812692165375.                             L2 error: 0.2095409482717514. 
+prop_dist: 1.0.                                           prop_dist: 1.0. 
+L0 error: 196608.0.                                       L0 error: 196608.0. 
+L_-inf error: 2.944469542853767e-06.                      L_-inf error: 3.8769098864577245e-06.
+
+
+attentiongan 5 images.                                    attentiongan 5 images.
+L1 error: 0.28060588240623474.                            L1 error: 0.2578476667404175. 
+L2 error: 0.17063145339488983.                            L2 error: 0.13261447846889496. 
+prop_dist: 1.0.                                           prop_dist: 1.0. 
+L0 error: 196608.0.                                       L0 error: 196608.0. 
+L_-inf error: 2.2292138055490796e-06.                     L_-inf error: 1.791119643712591e-06.
+
+
+HiDF 1 images.                                            HiDF 1 images. 
+L1 error: 0.23668023943901062.                            L1 error: 0.2742515802383423. 
+L2 error: 0.12822872400283813.                            L2 error: 0.13619264960289001. 
+prop_dist: 1.0.                                           prop_dist: 1.0. 
+L0 error: 196608.0.                                       L0 error: 196608.0. 
+L_-inf error: 1.7881393432617188e-07.                     L_-inf error: 2.5331974029541016e-07.
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@ authorName: Renaldi
 experimentName: trace
 trialConcurrency: 1
 maxExecDuration: 1000h
-maxTrialNum: 1
+maxTrialNum: 10
 #choice: local, remote, pai
 trainingServicePlatform: local
 searchSpacePath: search_space.json
@@ -22,7 +22,7 @@ tuner:
 trial:
   command: python universal_attack_nni.py
   codeDir: .
-  gpuNum: 0
+  gpuNum: 1
   
 localConfig:
   maxTrialNumPerGpu: 1

@@ -1,33 +1,33 @@
-import argparse
-import copy
-import json
-import os
-from os.path import join
-import sys
-import shutil
-import matplotlib.image
-from tqdm import tqdm
-from PIL import Image
-from attacks import LinfPGDAttack
+import argparse  # Modul untuk mem-parsing argumen dari command line
+import copy  # Modul untuk melakukan copy objek
+import json  # Modul untuk membaca dan menulis file JSON
+import os  # Modul untuk berinteraksi dengan sistem operasi
+from os.path import join  # Fungsi untuk menggabungkan path
+import sys  # Modul yang memberikan akses ke beberapa variabel dan fungsi yang memiliki hubungan erat dengan interpreter Python
+import shutil  # Modul untuk operasi file dan direktori
+import matplotlib.image  # Modul untuk manipulasi gambar
+from tqdm import tqdm  # Modul untuk menampilkan progress bar
+from PIL import Image,ImageTk  # Modul untuk operasi gambar menggunakan PIL (Python Imaging Library)
+from attacks import LinfPGDAttack  # Modul dengan serangan LinfPGDAttack yang digunakan
 
-import torch
-import torch.utils.data as data
-import torchvision.utils as vutils
-import torch.nn.functional as F
-from torchvision import transforms
+import torch  # Library untuk komputasi numerik menggunakan tensor
+import torch.utils.data as data  # Modul untuk mengatur dataset dan dataloader
+import torchvision.utils as vutils  # Modul untuk operasi-utilitas pada data visual
+import torch.nn.functional as F  # Modul berisi fungsi-fungsi utilitas dalam torch.nn
+from torchvision import transforms  # Modul untuk transformasi data pada gambar
 
-from AttGAN.data import check_attribute_conflict
+from AttGAN.data import check_attribute_conflict  # Fungsi untuk memeriksa konflik atribut
 
+from data import CelebA  # Modul dengan kelas CelebA untuk memanipulasi dataset
+import attacks  # Modul dengan serangan-serangan yang akan digunakan
 
+from model_data_prepare import prepare  # Fungsi untuk mempersiapkan model dan data
+from evaluate import evaluate_multiple_models  # Fungsi untuk mengevaluasi model
 
-from data import CelebA
-import attacks
-
-from model_data_prepare import prepare
-from evaluate import evaluate_multiple_models
-
+# Create the main window
 
 class ObjDict(dict):
+    
     """
     Makes a  dictionary behave like an object,with attribute-style access.
     """
@@ -38,6 +38,7 @@ class ObjDict(dict):
             raise AttributeError(name)
     def __setattr__(self,name,value):
         self[name]=value
+
 
 def parse(args=None):
     with open(join('./setting.json'), 'r') as f:
@@ -74,7 +75,7 @@ if __name__ == "__main__":
         pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
 
     # Init the attacked models
-    attack_dataloader, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F, T, G, E, reference, gen_models = prepare()
+    attack_dataloader, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F_, T, G, E, reference, gen_models = prepare()
     print("finished init the attacked models")
 
     tf = transforms.Compose([
@@ -84,10 +85,13 @@ if __name__ == "__main__":
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
-    image_path = './data/img_fasilkomUnsri18_ready/09021181823013_1.jpg'
+
+    image_path = './data/img_fasilkomUnsri18_ready/09010581822004_0.jpg'
     image = Image.open(image_path)
+    #image = Image.open(sys.argv[1])
     img = image.convert("RGB")
     img = tf(img).unsqueeze(0)
+
 
     # AttGAN inference and evaluating
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
@@ -211,7 +215,8 @@ if __name__ == "__main__":
         break
     print('attentiongan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
 
-
+    
+    # HiDF inference and evaluating
     l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
     n_dist, n_samples = 0, 0
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
@@ -258,4 +263,3 @@ if __name__ == "__main__":
             vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
         break
     print('HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
-

@@ -1,28 +1,25 @@
-import argparse
-import copy
-import json
-import os
-import shutil
-from os.path import join
-import sys
-import matplotlib.image
-from tqdm import tqdm
+import argparse  # Modul untuk mem-parsing argumen dari command line
+import copy  # Modul untuk melakukan copy objek
+import json  # Modul untuk membaca dan menulis file JSON
+import os  # Modul untuk berinteraksi dengan sistem operasi
+import shutil  # Modul untuk operasi file dan direktori
+from os.path import join  # Fungsi untuk menggabungkan path
+import sys  # Modul yang memberikan akses ke beberapa variabel dan fungsi yang memiliki hubungan erat dengan interpreter Python
+import matplotlib.image  # Modul untuk manipulasi gambar
+from tqdm import tqdm  # Modul untuk menampilkan progress bar
 
+import torch  # Library untuk komputasi numerik menggunakan tensor
+import torch.utils.data as data  # Modul untuk mengatur dataset dan dataloader
+import torchvision.utils as vutils  # Modul untuk operasi-utilitas pada data visual
+import torch.nn.functional as F  # Modul berisi fungsi-fungsi utilitas dalam torch.nn
 
-import torch
-import torch.utils.data as data
-import torchvision.utils as vutils
-import torch.nn.functional as F
+from AttGAN.data import check_attribute_conflict  # Fungsi untuk memeriksa konflik atribut
 
-from AttGAN.data import check_attribute_conflict
+from data import CelebA  # Modul dengan kelas CelebA untuk memanipulasi dataset
+import attacks  # Modul dengan serangan-serangan yang akan digunakan
 
-
-
-from data import CelebA
-import attacks
-
-from model_data_prepare import prepare
-from evaluate import evaluate_multiple_models
+from model_data_prepare import prepare  # Fungsi untuk mempersiapkan model dan data
+from evaluate import evaluate_multiple_models  # Fungsi untuk mengevaluasi model
 
 
 class ObjDict(dict):
@@ -60,21 +57,25 @@ print("experiment config is saved")
 
 # init attacker
 def init_Attack(args_attack):
-    pgd_attack = attacks.LinfPGDAttack(model=None, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'), epsilon=args_attack.attacks.epsilon, k=args_attack.attacks.k, a=args_attack.attacks.a, star_factor=args_attack.attacks.star_factor, attention_factor=args_attack.attacks.attention_factor, att_factor=args_attack.attacks.att_factor, HiSD_factor=args_attack.attacks.HiSD_factor, args=args_attack.attacks)
+    pgd_attack = attacks.LinfPGDAttack(model=None, device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'), 
+                                       epsilon=args_attack.attacks.epsilon, k=args_attack.attacks.k, a=args_attack.attacks.a, 
+                                       star_factor=args_attack.attacks.star_factor, attention_factor=args_attack.attacks.attention_factor, 
+                                       att_factor=args_attack.attacks.att_factor, HiSD_factor=args_attack.attacks.HiSD_factor, args=args_attack.attacks) 
+                                       # Inisialisasi serangan PGD menggunakan argumen dari objek args_attack
     return pgd_attack
 
 
-pgd_attack = init_Attack(args_attack)
+pgd_attack = init_Attack(args_attack)  # Inisialisasi objek serangan PGD
 
-# load the trained CMUA-Watermark
+# Memuat model CMUA-Watermark yang sudah dilatih
 if args_attack.global_settings.universal_perturbation_path:
     pgd_attack.up = torch.load(args_attack.global_settings.universal_perturbation_path)
 
-
-# Init the attacked models
+# Inisialisasi model yang akan diserang dan persiapan data
 attack_dataloader, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F, T, G, E, reference, gen_models = prepare()
-print("finished init the attacked models")
 
+print("finished init the attacked models")  # Mencetak pesan bahwa inisialisasi model yang diserang sudah selesai
 
-print('The size of CMUA-Watermark: ', pgd_attack.up.shape)
-evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F, T, G, E, reference, gen_models, pgd_attack)
+print('The size of CMUA-Watermark: ', pgd_attack.up.shape)  # Mencetak ukuran CMUA-Watermark yang digunakan dalam serangan
+
+evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, solver, attentiongan_solver, transform, F, T, G, E, reference, gen_models, pgd_attack)  # Mengevaluasi model yang diserang menggunakan serangan PGD pada dataset uji

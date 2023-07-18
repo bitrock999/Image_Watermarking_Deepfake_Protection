@@ -33,7 +33,7 @@ def evaluate_multiple_models(args_attack, test_dataloader, attgan, attgan_args, 
     for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
         if args_attack.global_settings.num_test is not None and idx == args_attack.global_settings.num_test * args_attack.global_settings.batch_size:
              break
-        # img_a = gauss
+        #img_a = gauss
         #if idx == 20:
         #    break
         img_a = img_a.cuda() if args_attack.global_settings.gpu else img_a

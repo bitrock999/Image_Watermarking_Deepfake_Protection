@@ -28,11 +28,6 @@ import attacks
 from model_data_prepare import prepare
 from evaluate import evaluate_multiple_models
 
-with open('setting.json') as f:
-    settings = json.load(f)
-data_path = settings['global_settings']['data_path_KPM']
-
-
 class ObjDict(dict):
     """
     Makes a  dictionary behave like an object,with attribute-style access.
@@ -89,180 +84,182 @@ if __name__ == "__main__":
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
-for filename in os.listdir(data_path):
-    if filename.endswith('.jpg'):
-        image_path = os.path.join(data_path, filename)
-        image = Image.open(image_path)
-        img = image.convert("RGB")
-        img = tf(img).unsqueeze(0)
+
+n_it = 0
+L1_tot_stargan, L2_tot_stargan, L0_tot_stargan, min_dist_tot_stargan  = 0.0, 0.0, 0.0, 0.0
+n_samples_tot_stargan, n_dist_tot_stargan = 0, 0
+
+L1_tot_AttGAN, L2_tot_AttGAN, L0_tot_AttGAN, min_dist_tot_AttGAN = 0.0, 0.0, 0.0, 0.0
+n_samples_tot_AttGAN, n_dist_tot_AttGAN = 0, 0
+
+L1_tot_AttentionGAN, L2_tot_AttentionGAN, L0_tot_AttentionGAN, min_dist_tot_AttentionGAN = 0.0, 0.0, 0.0, 0.0
+n_samples_tot_AttentionGAN, n_dist_tot_AttentionGAN = 0, 0
+
+L1_tot_HiDF, L2_tot_HiDF, L0_tot_HiDF, min_dist_tot_HiDF = 0.0, 0.0, 0.0, 0.0
+n_samples_tot_HiDF, n_dist_tot_HiDF = 0, 0
+
+# Save the original sys.stdout for later use
+original_stdout = sys.stdout
+# Open a file for writing the output
+with open('output.txt', 'w') as f:
+    # Redirect sys.stdout to the file
+    sys.stdout = f
     
-    # AttGAN inference and evaluating
-    l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
-    n_dist, n_samples = 0, 0
-    for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        img_a = img.cuda() if args_attack.global_settings.gpu else img_a
-        att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
-        att_a = att_a.type(torch.float)   
-        att_b_list = [att_a]
-        for i in range(attgan_args.n_attrs):
-            tmp = att_a.clone()
-            tmp[:, i] = 1 - tmp[:, i]
-            tmp = check_attribute_conflict(tmp, attgan_args.attrs[i], attgan_args.attrs)
-            att_b_list.append(tmp)
-        samples = [img_a, img_a+pgd_attack.up]
-        noattack_list = []
-        for i, att_b in enumerate(att_b_list):
-            att_b_ = (att_b * 2 - 1) * attgan_args.thres_int
-            if i > 0:
-                att_b_[..., i - 1] = att_b_[..., i - 1] * attgan_args.test_int / attgan_args.thres_int
+    for filename in os.listdir(data_path):
+        n_it += 1
+        if filename.endswith('.jpg'):
+            image_path = os.path.join(data_path, filename)
+            image = Image.open(image_path)
+            img = image.convert("RGB")
+            img = tf(img).unsqueeze(0)
+        
+        # AttGAN inference and evaluating
+        l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
+        n_dist, n_samples = 0, 0
+        for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
+            img_a = img.cuda() if args_attack.global_settings.gpu else img_a
+            att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
+            att_a = att_a.type(torch.float)   
+            att_b_list = [att_a]
+            for i in range(attgan_args.n_attrs):
+                tmp = att_a.clone()
+                tmp[:, i] = 1 - tmp[:, i]
+                tmp = check_attribute_conflict(tmp, attgan_args.attrs[i], attgan_args.attrs)
+                att_b_list.append(tmp)
+            samples = [img_a, img_a+pgd_attack.up]
+            noattack_list = []
+            for i, att_b in enumerate(att_b_list):
+                att_b_ = (att_b * 2 - 1) * attgan_args.thres_int
+                if i > 0:
+                    att_b_[..., i - 1] = att_b_[..., i - 1] * attgan_args.test_int / attgan_args.thres_int
+                with torch.no_grad():
+                    gen = attgan.G(img_a+pgd_attack.up, att_b_)
+                    gen_noattack = attgan.G(img_a, att_b_)
+                samples.append(gen)
+                noattack_list.append(gen_noattack)
+                l1_error += F.l1_loss(gen, gen_noattack)
+                l2_error += F.mse_loss(gen, gen_noattack)
+                l0_error += (gen - gen_noattack).norm(0)
+                min_dist += (gen - gen_noattack).norm(float('-inf'))
+                if F.mse_loss(gen, gen_noattack) > 0.05:
+                    n_dist += 1
+                n_samples += 1
+            break
+        print('{} filename{} AttGAN {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_it, filename, n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
+        L1_tot_AttGAN += l1_error
+        L2_tot_AttGAN += l2_error
+        L0_tot_AttGAN += l0_error
+        min_dist_tot_AttGAN += min_dist
+        n_dist_tot_AttGAN += n_dist
+        n_samples_tot_AttGAN += n_samples
+
+
+        # stargan inference and evaluating
+        l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
+        n_dist, n_samples = 0, 0
+        for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
+            img_a = img.cuda() if args_attack.global_settings.gpu else img_a
+            att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
+            att_a = att_a.type(torch.float)
+            x_noattack_list, x_fake_list = solver.test_universal_model_level(idx, img_a, c_org, pgd_attack.up, args_attack.stargan)
+            for j in range(len(x_fake_list)):
+                gen_noattack = x_noattack_list[j]
+                gen = x_fake_list[j]
+                l1_error += F.l1_loss(gen, gen_noattack)
+                l2_error += F.mse_loss(gen, gen_noattack)
+                l0_error += (gen - gen_noattack).norm(0)
+                min_dist += (gen - gen_noattack).norm(float('-inf'))
+                if F.mse_loss(gen, gen_noattack) > 0.05:
+                    n_dist += 1
+                n_samples += 1   
+            break
+        print('stargan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
+        L1_tot_stargan += l1_error
+        L2_tot_stargan += l2_error
+        L0_tot_stargan += l0_error
+        min_dist_tot_stargan += min_dist
+        n_dist_tot_stargan += n_dist
+        n_samples_tot_stargan += n_samples
+
+        # AttentionGAN inference and evaluating
+        l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
+        n_dist, n_samples = 0, 0
+        for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
+            img_a = img.cuda() if args_attack.global_settings.gpu else img_a
+            att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
+            att_a = att_a.type(torch.float)
+            x_noattack_list, x_fake_list = attentiongan_solver.test_universal_model_level(idx, img_a, c_org, pgd_attack.up, args_attack.AttentionGAN)
+            for j in range(len(x_fake_list)):
+                gen_noattack = x_noattack_list[j]
+                gen = x_fake_list[j]
+                l1_error += F.l1_loss(gen, gen_noattack)
+                l2_error += F.mse_loss(gen, gen_noattack)
+                l0_error += (gen - gen_noattack).norm(0)
+                min_dist += (gen - gen_noattack).norm(float('-inf'))
+                if F.mse_loss(gen, gen_noattack) > 0.05:
+                    n_dist += 1
+                n_samples += 1
+            break
+        print('attentiongan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
+        L1_tot_AttentionGAN += l1_error
+        L2_tot_AttentionGAN += l2_error
+        L0_tot_AttentionGAN += l0_error
+        min_dist_tot_AttentionGAN += min_dist
+        n_dist_tot_AttentionGAN += n_dist
+        n_samples_tot_AttentionGAN += n_samples
+
+
+        # HiDF inference and evaluating
+        l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
+        n_dist, n_samples = 0, 0
+        for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
+            img_a = img.cuda() if args_attack.global_settings.gpu else img_a
+            
             with torch.no_grad():
-                gen = attgan.G(img_a+pgd_attack.up, att_b_)
-                gen_noattack = attgan.G(img_a, att_b_)
-            samples.append(gen)
-            noattack_list.append(gen_noattack)
-            l1_error += F.l1_loss(gen, gen_noattack)
-            l2_error += F.mse_loss(gen, gen_noattack)
-            l0_error += (gen - gen_noattack).norm(0)
-            min_dist += (gen - gen_noattack).norm(float('-inf'))
-            if F.mse_loss(gen, gen_noattack) > 0.05:
-                n_dist += 1
-            n_samples += 1
+                # clean
+                c = E(img_a)
+                c_trg = c
+                s_trg = F_(reference, 1)
+                c_trg = T(c_trg, s_trg, 1)
+                gen_noattack = G(c_trg)
+
+                # adv
+                c = E(img_a + pgd_attack.up)
+                c_trg = c
+                s_trg = F_(reference, 1)
+                c_trg = T(c_trg, s_trg, 1)
+                gen = G(c_trg)
+                mask = abs(gen_noattack - img_a)
+                mask = mask[0,0,:,:] + mask[0,1,:,:] + mask[0,2,:,:]
+                mask[mask>0.5] = 1
+                mask[mask<0.5] = 0
+
+                l1_error += torch.nn.functional.l1_loss(gen, gen_noattack)
+                l2_error += torch.nn.functional.mse_loss(gen, gen_noattack)
+                l0_error += (gen - gen_noattack).norm(0)
+                min_dist += (gen - gen_noattack).norm(float('-inf'))
+                if (((gen*mask - gen_noattack*mask)**2).sum() / (mask.sum()*3)) > 0.05:
+                    n_dist += 1
+                n_samples += 1
+            break
+        print('HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
+        L1_tot_HiDF += l1_error
+        L2_tot_HiDF += l2_error
+        L0_tot_HiDF += l0_error
+        min_dist_tot_HiDF += min_dist
+        n_dist_tot_HiDF += n_dist
+        n_samples_tot_HiDF += n_samples
         
-        ############# Save image for metrics review #############
-        # Save original image
-        out_file = './demo_results/AttGAN_original.jpg'
-        vutils.save_image(
-            img_a.cpu(), out_file,
-            nrow=1, normalize=True, range=(-1., 1.)
-        )
-        for j in range(len(samples)-2):
-            # Save adversarial sample generation images  
-            out_file = './demo_results/AttGAN_advgen_{}.jpg'.format(j)
-            vutils.save_image(samples[j+2], out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # Save the original generated image
-            out_file = './demo_results/AttGAN_gen_{}.jpg'.format(j)
-            vutils.save_image(noattack_list[j], out_file, nrow=1, normalize=True, range=(-1., 1.))
-        
-        break
-        
-    print('AttGAN {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
-
-    # stargan inference and evaluating
-    l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
-    n_dist, n_samples = 0, 0
-    for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        img_a = img.cuda() if args_attack.global_settings.gpu else img_a
-        att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
-        att_a = att_a.type(torch.float)
-        x_noattack_list, x_fake_list = solver.test_universal_model_level(idx, img_a, c_org, pgd_attack.up, args_attack.stargan)
-        for j in range(len(x_fake_list)):
-            gen_noattack = x_noattack_list[j]
-            gen = x_fake_list[j]
-            l1_error += F.l1_loss(gen, gen_noattack)
-            l2_error += F.mse_loss(gen, gen_noattack)
-            l0_error += (gen - gen_noattack).norm(0)
-            min_dist += (gen - gen_noattack).norm(float('-inf'))
-            if F.mse_loss(gen, gen_noattack) > 0.05:
-                n_dist += 1
-            n_samples += 1
-            
-        
-        ############# Save image for metrics review #############
-        # Save original image
-        out_file = './demo_results/stargan_original.jpg'
-        vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
-        for j in range(len(x_fake_list)):
-            # Save the original image to generate an image
-            gen_noattack = x_noattack_list[j]
-            out_file = './demo_results/stargan_gen_{}.jpg'.format(j)
-            vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # Save adversarial sample generation images    
-            gen = x_fake_list[j]
-            out_file = './demo_results/stargan_advgen_{}.jpg'.format(j)
-            vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
-        break
-    print('stargan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
-
-    # AttentionGAN inference and evaluating
-    l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
-    n_dist, n_samples = 0, 0
-    for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        img_a = img.cuda() if args_attack.global_settings.gpu else img_a
-        att_a = att_a.cuda() if args_attack.global_settings.gpu else att_a
-        att_a = att_a.type(torch.float)
-        x_noattack_list, x_fake_list = attentiongan_solver.test_universal_model_level(idx, img_a, c_org, pgd_attack.up, args_attack.AttentionGAN)
-        for j in range(len(x_fake_list)):
-            gen_noattack = x_noattack_list[j]
-            gen = x_fake_list[j]
-            l1_error += F.l1_loss(gen, gen_noattack)
-            l2_error += F.mse_loss(gen, gen_noattack)
-            l0_error += (gen - gen_noattack).norm(0)
-            min_dist += (gen - gen_noattack).norm(float('-inf'))
-            if F.mse_loss(gen, gen_noattack) > 0.05:
-                n_dist += 1
-            n_samples += 1
-        
-        ############# Save image for metrics review #############
-        # Save original image
-        out_file = './demo_results/attentiongan_original.jpg'
-        vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
-        for j in range(len(x_fake_list)):
-            # Save the original image to generate an image
-            gen_noattack = x_noattack_list[j]
-            out_file = './demo_results/attentiongan_gen_{}.jpg'.format(j)
-            vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            # Save adversarial sample generation images
-            gen = x_fake_list[j]
-            out_file = './demo_results/attentiongan_advgen_{}.jpg'.format(j)
-            vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
-        break
-    print('attentiongan {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
+        print('')
 
 
-    l1_error, l2_error, min_dist, l0_error = 0.0, 0.0, 0.0, 0.0
-    n_dist, n_samples = 0, 0
-    for idx, (img_a, att_a, c_org) in enumerate(test_dataloader):
-        img_a = img.cuda() if args_attack.global_settings.gpu else img_a
-        
-        with torch.no_grad():
-            # clean
-            c = E(img_a)
-            c_trg = c
-            s_trg = F_(reference, 1)
-            c_trg = T(c_trg, s_trg, 1)
-            gen_noattack = G(c_trg)
+    print('stargan_total {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples_tot_stargan, L1_tot_stargan / n_samples_tot_stargan, L2_tot_stargan / n_samples_tot_stargan, float(n_dist_tot_stargan) / n_samples_tot_stargan, L0_tot_stargan/ n_samples_tot_stargan, min_dist_tot_stargan / n_samples_tot_stargan))
+    print('')
+    print('AttGAN_total {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples_tot_AttGAN, L1_tot_AttGAN / n_samples_tot_AttGAN, L2_tot_AttGAN / n_samples_tot_AttGAN, float(n_dist_tot_AttGAN) / n_samples_tot_AttGAN, L0_tot_AttGAN/ n_samples_tot_AttGAN, min_dist_tot_AttGAN/ n_samples_tot_AttGAN))
+    print('')
+    print('AttentionGAN_total {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples_tot_AttentionGAN, L1_tot_AttentionGAN / n_samples_tot_AttentionGAN, L2_tot_AttentionGAN / n_samples_tot_AttentionGAN, float(n_dist_tot_AttentionGAN) / n_samples_tot_AttentionGAN, L0_tot_AttentionGAN/ n_samples_tot_AttentionGAN, min_dist_tot_AttentionGAN / n_samples_tot_AttentionGAN))
+    print('')
+    print('HiDF_total {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples_tot_HiDF, L1_tot_HiDF / n_samples_tot_HiDF, L2_tot_HiDF / n_samples_tot_HiDF, float(n_dist_tot_HiDF) / n_samples_tot_HiDF, L0_tot_HiDF / n_samples_tot_HiDF, min_dist_tot_HiDF / n_samples_tot_HiDF))
 
-            # adv
-            c = E(img_a + pgd_attack.up)
-            c_trg = c
-            s_trg = F_(reference, 1)
-            c_trg = T(c_trg, s_trg, 1)
-            gen = G(c_trg)
-            mask = abs(gen_noattack - img_a)
-            mask = mask[0,0,:,:] + mask[0,1,:,:] + mask[0,2,:,:]
-            mask[mask>0.5] = 1
-            mask[mask<0.5] = 0
-
-            l1_error += torch.nn.functional.l1_loss(gen, gen_noattack)
-            l2_error += torch.nn.functional.mse_loss(gen, gen_noattack)
-            l0_error += (gen - gen_noattack).norm(0)
-            min_dist += (gen - gen_noattack).norm(float('-inf'))
-            if (((gen*mask - gen_noattack*mask)**2).sum() / (mask.sum()*3)) > 0.05:
-                n_dist += 1
-            n_samples += 1
-
-            ############# Save image for metrics review #############
-            # Save original image
-            out_file = './demo_results/HiSD_original.jpg'
-            vutils.save_image(img_a.cpu(), out_file, nrow=1, normalize=True, range=(-1., 1.))
-
-            out_file = './demo_results/HiSD_gen.jpg'
-            vutils.save_image(gen_noattack, out_file, nrow=1, normalize=True, range=(-1., 1.))
-            
-            # Save adversarial sample generation images
-            gen = x_fake_list[j]
-            out_file = './demo_results/HiSD_advgen.jpg'
-            vutils.save_image(gen, out_file, nrow=1, normalize=True, range=(-1., 1.))
-        break
-    print('HiDF {} images. L1 error: {}. L2 error: {}. prop_dist: {}. L0 error: {}. L_-inf error: {}.'.format(n_samples, l1_error / n_samples, l2_error / n_samples, float(n_dist) / n_samples, l0_error / n_samples, min_dist / n_samples))
-
+# Restore sys.stdout to its original value
+sys.stdout = original_stdout
